@@ -1,3 +1,19 @@
+import axios from 'axios'
+import Cookies from 'js-cookie'
+export const api = axios.create(
+    {
+        baseURL: "http://localhost:5000",
+        headers: {
+            Authorization: `Bearer ${Cookies.get('token')}`
+        }
+    }
+)
+
+
+
+
+
+// -------------------------------
 export const _onClickOutElem = (elem, func) => {
     const clk = e => {
         if (!elem.contains(e.target)) {
@@ -18,3 +34,5 @@ export const CorrectTime = (t) => {
         return `${time.getHours()}:${time.getMinutes()}`
     }
 }
+
+

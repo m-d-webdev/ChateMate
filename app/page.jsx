@@ -11,18 +11,18 @@ export default function Home() {
         <div className="c-s-s">
           <div className="w-full c-s-s mb-5">
             <h1 className="text-4xl">Whooo’s ready to chat? </h1>
-            <h2 className="max-w-xl ml-4 opacity-80 mt-5 text-xl">
-              Welcome to ChatMate – the wildest place to chat with friends, meet new ones, and dive into smart, fun conversations with AI! Let’s get talking
+            <h2 className="max-w-xl  opacity-80 mt-5 text-xl">
+              Welcome to ChatMate – the wildest place to chat with friends, meet new ones, and dive into smart, fun conversations with Owlia! Let’s get talking
             </h2>
           </div>
-          <div className="w-full r-c-c mt-9">
+          <div className="w-full r-s-c mt-7">
             <Link href={"/Chats"} className="r-c-c text-white px-5 py-2  rounded-3xl w-2/4 bg-black">
               Join the Chat
               <svg className="fill-white ml-3" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
             </Link>
           </div>
 
-          <Link href={"/Meetmates"} className=" font-bold r-s-c mt-20">
+          <Link href={"/Owlia"} className=" font-bold r-s-c mt-20">
             <Image
               src={'./icones/owliaLogo.svg'}
               width={"20"}

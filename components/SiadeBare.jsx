@@ -4,11 +4,11 @@ import React from 'react'
 import ChateMateLogo from './logo.jsx';
 import Link from 'next/link';
 import Image from 'next/image';
-import User from './user.jsx';
+import User from '../app/hidden/user.jsx';
 
 const SiadeBare = () => {
   return (
-    <div className='h-screen border p-6 c-b-c'>
+    <div className='h-screen border bg-white rounded-xl p-6 c-b-c'>
 
       <ChateMateLogo />
       <div className="c-c-c">

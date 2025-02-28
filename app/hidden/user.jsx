@@ -1,7 +1,12 @@
+'use server';
+import { api } from '@/utilityfunctions'
 import Link from 'next/link'
-import React from 'react'
 
-const User = () => {
+const User = async () => {
+
+    const res = await api.get('/authenticateUser')
+    console.log(res);
+    
     return (
         <div className='c-c-c '>
             <Link href={'/login'} className='c-c-c w-full  border rounded-lg p-2'>
@@ -14,6 +19,7 @@ const User = () => {
             </Link>
         </div>
     )
+
 }
 
 export default User

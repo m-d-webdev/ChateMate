@@ -267,3 +267,13 @@ svg {
 .scrl_none::-webkit-scrollbar {
   display: none;
 }
+
+h1 {
+  font-size: 16px;
+}
+
+.img {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+}
