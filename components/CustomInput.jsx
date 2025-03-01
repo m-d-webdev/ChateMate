@@ -13,7 +13,7 @@ const CustomInput = ({ disabled, className, Svg, placeholder = "", id = "customI
 
     return (
         <div  className={`w-full relative border rounded-xl max-w-md r-s-c bg-white pl-10 ${className}`}>
-            <input disabled={disabled} type={type ? type : "text"} id={id} onChange={handelChangeVal} className='border-none font-bold   pt-5 w-full outline-none  ml-2 p-2 inputCustomInput' placeholder={placeholder} value={localvalue} />
+            <input disabled={disabled} type={type ? type : "text"} id={id} name={id} onChange={handelChangeVal} className='border-none font-bold   pt-5 w-full outline-none  ml-2 p-2 inputCustomInput' placeholder={placeholder} value={localvalue} />
             <label htmlFor={id} className='absolute left-14 op-80 labelCustomInput'>{label}</label>
             <div className="absolute left-2 cntSvgCustomInput">
                 <Svg className='w-5 h-5' />

@@ -177,6 +177,12 @@ svg {
   align-items: center;
   flex-direction: column;
 }
+.c-e-c {
+  display: flex;
+  justify-content:end;
+  align-items: center;
+  flex-direction: column;
+}
 
 .c-b-c {
   display: flex;
@@ -268,12 +274,19 @@ svg {
   display: none;
 }
 
-h1 {
-  font-size: 16px;
-}
 
 .img {
   border-radius: 50%;
   object-fit: cover;
   object-position: top;
+}
+
+.modal{
+  position: fixed;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color:rgba(0, 0, 0, 0.359);
 }

@@ -1,14 +1,40 @@
 "use client";
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import CustomInput from '@/components/CustomInput'
+import { api } from '@/utilityfunctions';
+import Spinner from '@/components/loaders/Spinner';
+import Cookies from 'js-cookie';
 const page = () => {
+
+    const [isLoading, setLoading] = useState(false)
+    const [emailOrName, setEmail] = useState('')
+    const [password, setPassword] = useState("")
+    const [isError, setError] = useState(false)
+
+    const handelLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true)
+
+        await api.post('/login', { emailOrName, password }).then((res) => {
+            Cookies.set('token', res.data.token)
+            window.location.href ="/"
+        })
+            .catch(err => {
+                setLoading(false)
+                setError(true)
+            })
+
+
+    }
+
     return (
         <div className="w-full  p-10   h-screen c-b-c">
             <div className=""></div>
             <div className="r-p-c rounded-md border w-full h-full  max-w-screen-2xl">
                 <div className="c-s-s w-6/12 max-w-xl">
+
                     <h1 className="text-3xl">Login to ChateMate </h1>
                     <div className="r-s-e mt-10">
                         <h2 className=" text-2xl">
@@ -20,17 +46,20 @@ const page = () => {
                     <CustomInput
                         Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28"></path> </svg>}
                         label={"Email"}
-                        onChange={() => { }}
+                        onChange={e => setEmail(e)}
+                        value={emailOrName}
                         placeholder=''
                         id='email'
+
                         className='mt-20'
                     />
 
                     <CustomInput
                         Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path> <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path> </svg>}
                         label={"Password"}
-                        onChange={() => { }}
+                        onChange={(e) => setPassword(e)}
                         placeholder=''
+                        value={password}
                         className='mt-5'
                         id='password'
                         type="password"
@@ -43,9 +72,16 @@ const page = () => {
                         Forgot Password?
                     </Link>
                     <div className="w-full  max-w-md mt-5 r-e-c">
-                        <button className='bg-black text-white px-10 py-1 rounded-md r-c-c font-bold'>
-                            Login
-                            <svg className='fill-white ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
+                        <button onClick={handelLogin} disabled={!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailOrName) || password == ""} className='bg-black disabled:opacity-70 text-white px-10 py-1 rounded-md r-c-c font-bold'>
+                            {
+                                isLoading ?
+                                    <Spinner d='border-white border-4 w-6 h-6' />
+                                    :
+                                    <>
+                                        Login
+                                        <svg className='fill-white ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
+                                    </>
+                            }
                         </button>
                     </div>
 
@@ -68,7 +104,7 @@ const page = () => {
                         <Link href={'/register'} className='py-3 border rounded-md  w-full  r-c-c'>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
                             <p className="font-bold ml-2 opacity-70">
-                                Create new account 
+                                Create new account
                             </p>
                         </Link>
                     </div>

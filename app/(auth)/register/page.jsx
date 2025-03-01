@@ -143,7 +143,7 @@ const page = () => {
                         label={"Full name"}
                         onChange={(e) => { setNewUser(c => ({ ...c, fullName: e })) }}
                         placeholder=''
-                        id='full-name'
+                        id='fullName'
                         className='mt-20'
                     />
 

@@ -1,9 +1,7 @@
-import { LayoutRouter } from "next/dist/server/app-render/entry-base";
 import Image from "next/image";
-import RootLayout from "./layout";
 import Link from "next/link";
-// import OwlioLogo from "@/public/icones/owliaLogo.svg"
-export default function Home() {
+
+export default  function Home() {
   return (
     <div className="w-full  p-10   h-screen c-b-s">
       <div className=""></div>
@@ -16,13 +14,16 @@ export default function Home() {
             </h2>
           </div>
           <div className="w-full r-s-c mt-7">
+
             <Link href={"/Chats"} className="r-c-c text-white px-5 py-2  rounded-3xl w-2/4 bg-black">
               Join the Chat
               <svg className="fill-white ml-3" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
             </Link>
+
           </div>
 
           <Link href={"/Owlia"} className=" font-bold r-s-c mt-20">
+
             <Image
               src={'./icones/owliaLogo.svg'}
               width={"20"}
@@ -30,7 +31,9 @@ export default function Home() {
               className="mr-2"
               alt="logo"
             />
+
             Dive into the future with Owlia !
+
           </Link>
           <Link href={"/Meetmates"} className=" font-bold r-s-c mt-5">
             <svg className="mr-2 w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M3 21v-2a4 4 0 0 1 4 -4h4c.96 0 1.84 .338 2.53 .901"></path> <path d="M16 3.13a4 4 0 0 1 0 7.75"></path> <path d="M16 19h6"></path> <path d="M19 16v6"></path> </svg>

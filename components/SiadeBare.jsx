@@ -1,14 +1,12 @@
-"use client";
 
-import React from 'react'
 import ChateMateLogo from './logo.jsx';
 import Link from 'next/link';
 import Image from 'next/image';
-import User from '../app/hidden/user.jsx';
+import User from './user.jsx';
 
-const SiadeBare = () => {
+const SiadeBare = ({ user }) => {
   return (
-    <div className='h-screen border bg-white rounded-xl p-6 c-b-c'>
+    <div className='h-screen border bg-white rounded-xl p-2 c-b-c'>
 
       <ChateMateLogo />
       <div className="c-c-c">
@@ -30,7 +28,7 @@ const SiadeBare = () => {
           MeetMates
         </Link>
       </div>
-      <User />
+      <User user={user} />
     </div>
   )
 }
