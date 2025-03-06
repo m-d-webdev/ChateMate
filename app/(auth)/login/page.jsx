@@ -19,7 +19,7 @@ const page = () => {
 
         await api.post('/login', { emailOrName, password }).then((res) => {
             Cookies.set('token', res.data.token)
-            window.location.href ="/"
+            window.location.href = "/"
         })
             .catch(err => {
                 setLoading(false)
@@ -34,79 +34,85 @@ const page = () => {
             <div className=""></div>
             <div className="r-p-c rounded-md border w-full h-full  max-w-screen-2xl">
                 <div className="c-s-s w-6/12 max-w-xl">
+                    <div className="c-s-s w-full">
 
-                    <h1 className="text-3xl">Login to ChateMate </h1>
-                    <div className="r-s-e mt-10">
-                        <h2 className=" text-2xl">
-                            Welcome back!
-                        </h2>
-                        <p className="op-70 ml-3">Log in to your account</p>
+                        <h1 className="text-2xl">Login to ChateMate </h1>
+                        <div className="r-s-e mt-2">
+                            <h2 className=" text-xl">
+                                Welcome back!
+                            </h2>
+                            <p className="op-70 ml-3">Log in to your account</p>
+                        </div>
                     </div>
+                    <div className="c-s-s w-full">
 
-                    <CustomInput
-                        Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28"></path> </svg>}
-                        label={"Email"}
-                        onChange={e => setEmail(e)}
-                        value={emailOrName}
-                        placeholder=''
-                        id='email'
+                        <CustomInput
+                            Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28"></path> </svg>}
+                            label={"Email"}
+                            onChange={e => setEmail(e)}
+                            value={emailOrName}
+                            placeholder=''
+                            id='email'
 
-                        className='mt-20'
-                    />
+                            className='mt-20'
+                        />
 
-                    <CustomInput
-                        Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path> <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path> </svg>}
-                        label={"Password"}
-                        onChange={(e) => setPassword(e)}
-                        placeholder=''
-                        value={password}
-                        className='mt-5'
-                        id='password'
-                        type="password"
-                    />
+                        <CustomInput
+                            Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path> <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path> <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path> </svg>}
+                            label={"Password"}
+                            onChange={(e) => setPassword(e)}
+                            placeholder=''
+                            value={password}
+                            className='mt-5'
+                            id='password'
+                            type="password"
+                        />
 
-                    <Link
-                        className='mt-4 opacity-70'
-                        href={'/restorPassword'}
-                    >
-                        Forgot Password?
-                    </Link>
-                    <div className="w-full  max-w-md mt-5 r-e-c">
-                        <button onClick={handelLogin} disabled={!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailOrName) || password == ""} className='bg-black disabled:opacity-70 text-white px-10 py-1 rounded-md r-c-c font-bold'>
-                            {
-                                isLoading ?
-                                    <Spinner d='border-white border-4 w-6 h-6' />
-                                    :
-                                    <>
-                                        Login
-                                        <svg className='fill-white ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
-                                    </>
-                            }
-                        </button>
-                    </div>
-
-
-                    <div className="w-full  max-w-md mt-20 r-p-c">
-                        <button className='py-3 mr-1 border group rounded-md  w-2/4 r-c-c'>
-                            <svg className=' group-hover:stroke-none group-hover:fill-red-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"></path> </svg>
-                            <p className="font-bold group-hover:text-red-500 ml-2 opacity-70">
-                                Google
-                            </p>
-                        </button>
-                        <button className='py-3 border group rounded-md  w-2/4 r-c-c'>
-                            <svg className=' group-hover:stroke-none group-hover:fill-blue-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path> </svg>
-                            <p className="font-bold ml-2  group-hover:text-blue-500 opacity-70">
-                                Facebook
-                            </p>
-                        </button>
-                    </div>
-                    <div className="w-full  max-w-md mt-8 r-p-c">
-                        <Link href={'/register'} className='py-3 border rounded-md  w-full  r-c-c'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
-                            <p className="font-bold ml-2 opacity-70">
-                                Create new account
-                            </p>
+                        <Link
+                            className='mt-4 opacity-70'
+                            href={'/restorPassword'}
+                        >
+                            Forgot Password?
                         </Link>
+                        <div className="w-full  max-w-md mt-5 r-e-c">
+                            <button onClick={handelLogin} disabled={!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailOrName) || password == ""} className='bg-black disabled:opacity-70 text-white px-10 py-1 rounded-md r-c-c font-bold'>
+                                {
+                                    isLoading ?
+                                        <Spinner isWhite={true}/>
+                                        :
+                                        <>
+                                            Login
+                                            <svg className='fill-white ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m700-300-57-56 84-84H120v-80h607l-83-84 57-56 179 180-180 180Z" /></svg>
+                                        </>
+                                }
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div className="c-s-s w-full">
+                        <div className="w-full  max-w-md mt-20 r-p-c">
+                            <button className='py-3 mr-1 border group rounded-md  w-2/4 r-c-c'>
+                                <svg className=' group-hover:stroke-none group-hover:fill-red-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"></path> </svg>
+                                <p className="font-bold group-hover:text-red-500 ml-2 opacity-70">
+                                    Google
+                                </p>
+                            </button>
+                            <button className='py-3 border group rounded-md  w-2/4 r-c-c'>
+                                <svg className=' group-hover:stroke-none group-hover:fill-blue-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path> </svg>
+                                <p className="font-bold ml-2  group-hover:text-blue-500 opacity-70">
+                                    Facebook
+                                </p>
+                            </button>
+                        </div>
+                        <div className="w-full  max-w-md mt-8 r-p-c">
+                            <Link href={'/register'} className='py-3 border rounded-md  w-full  r-c-c'>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 5l0 14"></path> <path d="M5 12l14 0"></path> </svg>
+                                <p className="font-bold ml-2 opacity-70">
+                                    Create new account
+                                </p>
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className="h-full c-e-e w-6/12">

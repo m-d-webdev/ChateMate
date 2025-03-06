@@ -4,7 +4,8 @@ import "./globals.css";
 import SiadeBare from "@/components/SiadeBare";
 import { api } from "@/utilityfunctions";
 import { cookies } from "next/headers";
-const poppins = Poppins({ subsets: ['latin'], weight: ['400'] })
+import FriendProvider from "./user/profile/FriendProvider";
+const poppins = Poppins({ subsets: ['latin'], weight: ['500'] })
 
 // export  const metadata = {
 //   title: "Create Next App",
@@ -24,11 +25,13 @@ export default async function RootLayout({ children, modal }) {
       <body
         className={`${poppins.className}  r-s-s`}
       >
-        <SiadeBare user={user} />
-        {children}
+        <FriendProvider>
 
-        {modal}
+          <SiadeBare user={user} />
+          {children}
+          {modal}
 
+        </FriendProvider>
       </body>
 
 

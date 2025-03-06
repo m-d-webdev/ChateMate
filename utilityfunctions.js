@@ -4,7 +4,7 @@ export const api = axios.create(
     {
         baseURL: "http://localhost:5000",
         headers: {
-            Authorization: `Bearer ${Cookies.get('token')}`
+            Authorization: `Bearer ${Cookies.get('token') ? Cookies.get('token'):null}`
         },
         withCredentials:true
     }
@@ -12,13 +12,10 @@ export const api = axios.create(
 
 
 
-
-
 // -------------------------------
 export const _onClickOutElem = (elem, func) => {
     const clk = e => {
         if (!elem.contains(e.target)) {
-            console.log('click Out');
             document.removeEventListener("mousedown", clk)
             func();
         }

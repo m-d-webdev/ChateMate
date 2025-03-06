@@ -10,7 +10,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["i.pinimg.com"]
+    domains: ["i.pinimg.com","localhost"]
   }
 };
 export default nextConfig;

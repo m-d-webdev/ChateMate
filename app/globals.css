@@ -7,11 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: "Quicksand", serif; */
-  /* font-family: "42dot Sans", serif; */
-  ;
-  color: var(--bg-secondary);
-  font-weight: 600;
+  font-weight: 500;
   transition: .15s;
 }
 
@@ -177,9 +173,10 @@ svg {
   align-items: center;
   flex-direction: column;
 }
+
 .c-e-c {
   display: flex;
-  justify-content:end;
+  justify-content: end;
   align-items: center;
   flex-direction: column;
 }
@@ -188,6 +185,13 @@ svg {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
+}
+
+.c-b-e {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
   flex-direction: column;
 }
 
@@ -258,13 +262,11 @@ svg {
 
 .inputCustomInput:not(:placeholder-shown)~.cntSvgCustomInput>*,
 .inputCustomInput:focus~.cntSvgCustomInput>* {
-  stroke: var(--bg-blue);
   stroke-width: 2;
 }
 
 .inputCustomInput:not(:placeholder-shown)~.labelCustomInput,
 .inputCustomInput:focus~.labelCustomInput {
-  color: var(--bg-blue);
   opacity: .8;
   font-size: 12px;
   transform: translateY(-14px);
@@ -281,12 +283,25 @@ svg {
   object-position: top;
 }
 
-.modal{
+.modal {
   position: fixed;
   z-index: 50;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background-color:rgba(0, 0, 0, 0.359);
+  background-color: rgba(0, 0, 0, 0.359);
 }
+h1{
+  font-weight: 800;
+}
+h2{
+  font-weight: 700;
+}
+strong{
+  font-weight: 700;
+}
+h2{
+  font-weight: 500;
+}
+

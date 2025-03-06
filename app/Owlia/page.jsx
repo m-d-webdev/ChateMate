@@ -1,143 +1,90 @@
-"use client"
+"use client";
 import WriteMessage from '@/components/WriteMessage';
 import Image from 'next/image';
 import { Aoboshi_One } from 'next/font/google'
 import React, { useEffect, useRef, useState } from 'react'
 import Message from '@/components/message';
 import { AnimatePresence, motion } from 'framer-motion';
-import { _onClickOutElem } from '@/utilityfunctions';
+import { _onClickOutElem, api } from '@/utilityfunctions';
+import Loader from '@/components/loaders/Loader';
+import Cookies from 'js-cookie';
 const aoboshi_One = Aoboshi_One({
     subsets: ['latin'],
     weight: ['400']
 })
 const page = () => {
+    const [user, setUser] = useState(null);
+    const getCurrentUser = async () => {
+        if (Cookies.get("token")) {
+            const res = await api.get("/user/get")
+            setUser(res.data.user)
+        }
+    }
+
+    useEffect(() => {
+        getCurrentUser()
+    }, [])
 
     const [isMenuOpened, setMenuOpened] = useState(false)
     const [MyMessages, setMyMessages] = useState([]);
-    const [OwliaMessages, setOwliaMessages] = useState([]);
-    const messages = [
-        {
-            id: 1,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Hi there! How are you today?",
-            isFromMe: true,
-        },
-        {
-            id: 2,
-            img: "/icones/owliaLogo.svg",
-            content: "I'm doing well, thank you! How can I assist you?",
-            isFromMe: false,
-        },
-        {
-            id: 3,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Can you tell me more about letter spacing in Tailwind CSS?",
-            isFromMe: true,
-        },
-        {
-            id: 4,
-            img: "/icones/owliaLogo.svg",
-            content: "Sure! Letter spacing can be adjusted using the `tracking` utility classes.",
-            isFromMe: false,
-        },
-        {
-            id: 5,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "That's great! Can you show me an example?",
-            isFromMe: true,
-        },
-        {
-            id: 6,
-            img: "/icones/owliaLogo.svg",
-            content: "Certainly! You can use classes like `tracking-tight`, `tracking-normal`, and `tracking-wide` Certainly! You can use classes like `tracking-tight`, `tracking-normal`, and `tracking-wide` Certainly! You can use classes like `tracking-tight`, `tracking-normal`, and `tracking-wide`.",
-            isFromMe: false,
-        },
-        {
-            id: 7,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "How do I customize letter spacing in my project?",
-            isFromMe: true,
-        },
-        {
-            id: 8,
-            img: "/icones/owliaLogo.svg",
-            content: "You can add custom values in your Tailwind configuration file under the `letterSpacing` section.",
-            isFromMe: false,
-        },
-        {
-            id: 9,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Can I use negative letter spacing?",
-            isFromMe: true,
-        },
-        {
-            id: 10,
-            img: "/icones/owliaLogo.svg",
-            content: "Yes, you can use negative values in your configuration for tighter letter spacing.",
-            isFromMe: false,
-        },
-        {
-            id: 11,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "What are some common use cases for letter spacing?",
-            isFromMe: true,
-        },
-        {
-            id: 12,
-            img: "/icones/owliaLogo.svg",
-            content: "Common use cases include improving readability, creating emphasis, or achieving a specific aesthetic.",
-            isFromMe: false,
-        },
-        {
-            id: 13,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Can I apply letter spacing to headings and paragraphs?",
-            isFromMe: true,
-        },
-        {
-            id: 14,
-            img: "/icones/owliaLogo.svg",
-            content: "Absolutely! You can apply letter spacing to any text element using the appropriate classes.",
-            isFromMe: false,
-        },
-        {
-            id: 15,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Thanks for the help! This is really useful.",
-            isFromMe: true,
-        },
-        {
-            id: 16,
-            img: "/icones/owliaLogo.svg",
-            content: "You're welcome! If you have any more questions, feel free to ask.",
-            isFromMe: false,
-        },
-        {
-            id: 17,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "What other utilities should I explore in Tailwind CSS?",
-            isFromMe: true,
-        },
-        {
-            id: 18,
-            img: "/icones/owliaLogo.svg",
-            content: "You might want to look into margin, padding, and color utilities for better layout control.",
-            isFromMe: false,
-        },
-        {
-            id: 19,
-            img: "https://i.pinimg.com/236x/03/eb/d6/03ebd625cc0b9d636256ecc44c0ea324.jpg",
-            content: "Awesome! I’ll check those out. Thank you!",
-            isFromMe: true,
-        },
-        {
-            id: 20,
-            img: "/icones/owliaLogo.svg",
-            content: "Happy to help! Enjoy your coding!",
-            isFromMe: false,
-        },
-    ];
-    const menuRef = useRef()
+    const [FaileToResponse, setFaileToResponse] = useState(false);
+    const [messages, setMessages] = useState([]);
+
+    const [NewMessage, setNewMessage] = useState("")
+    const menuRef = useRef();
+
+    const [isWaitingForResponse, setWaitingForResponse] = useState(false)
+    const messageContainerRef = useRef()
+
+
+    const SendMessage = async () => {
+        setWaitingForResponse(true);
+
+        let chatHistroy = messages.map(m => ({ role: m.isFromMe ? "user" : "assistant", content: m.content })).slice(-5);
+
+        chatHistroy.push(
+            {
+                role: "user",
+                content: NewMessage
+            }
+        )
+
+
+        setMessages(pv => ([
+            ...pv,
+            {
+                content: NewMessage,
+                isFromMe: true,
+                img: user ? user.pic : "https://i.pinimg.com/236x/57/00/c0/5700c04197ee9a4372a35ef16eb78f4e.jpg",
+            }
+        ]))
+        setNewMessage("");
+
+        let res = await api.post("/owlia/ask", { chatHistroy })
+
+
+        if (res.status == 200) {
+            setMessages(pv => ([
+                ...pv,
+                {
+                    content: res.data.answer.reply,
+                    isFromMe: false,
+                    img: "/icones/owliaLogo.svg",
+                }
+            ]))
+            messageContainerRef.current.scrollTo({
+                top: messageContainerRef.current?.scrollHeight - 300,
+                behavior: "smooth"
+            })
+
+        } else {
+            setFaileToResponse(true)
+        }
+
+        setWaitingForResponse(false);
+    }
+
+
 
     useEffect(() => {
         if (menuRef.current) {
@@ -158,31 +105,48 @@ const page = () => {
                 />
                 <h1 className='font-bold text-xl'>Owlia</h1>
             </div>
-            <div className="h-full w-full max-w-6xl c-c-c">
+
+            <div className="h-full w-full  max-w-6xl c-c-c">
                 {
                     messages.length == 0 ?
                         <div className='c-c-c mb-20'>
                             <Image
-
                                 src={'/icones/owliaLogo.svg'}
                                 width={80}
                                 height={80}
                                 alt='owliaLogo'
                             />
-                            <h1 className={`text-3xl tracking-[.5px] mt-4 ${aoboshi_One.className}`}>
+                            <h1 className={`text-3xl tracking-[.1px] mt-4 ${aoboshi_One.className}`}>
                                 What's up ? Let’s chat and have a good time!
                             </h1>
                         </div>
                         :
-                        <div className='h-full scrl_none pt-10 mb-2 w-full max-h-full overflow-auto ' >
+                        <div style={{ paddingBottom: `${messageContainerRef.current?.offsetHeight - 100}px` }} ref={messageContainerRef} className='h-full scrl_none pt-10 mb-2 w-full max-h-full overflow-auto ' >
                             {
-                                messages.map(m => <Message m={m} key={m.id} />)
+                                messages.map((m, i) => <Message m={m} key={i} />)
+                            }
+
+                            {
+                                isWaitingForResponse &&
+                                <div className="w-full r-s-c">
+                                    <Loader height={70} />
+                                </div>
+                            }
+                            {
+                                FaileToResponse &&
+                                <p className="text-red-500 ">
+                                    Owlia encountered an error and could not respond
+                                </p>
                             }
                         </div>
 
                 }
                 <WriteMessage
+                    onChange={e => setNewMessage(e)}
                     className={''}
+                    onSend={SendMessage}
+                    value={NewMessage}
+                    isWaitinForRespose={isWaitingForResponse}
                     placeholder={"Ask Owlia anything .. "}
                 />
             </div>
