@@ -15,7 +15,7 @@ export default async function UserPage({ params }) {
         const user = await GetUser()
 
         return (
-            <CustomDialog className={'min-w-96'}>
+            <CustomDialog className={'w-full max-w-xl'}>
                 <div className="c-c-c w-full">
                     <div className="c-c-c">
                         <div className="p-4 rounded-full border border-gray-200">
@@ -40,17 +40,17 @@ export default async function UserPage({ params }) {
                                 <>
                                     <div className="w-full r-p-c">
 
-                                        <Link href={"/changeName"} className=" border mr-1 rounded-3xl border-gray-400 p-1 px-4 r-c-c">
-                                            <svg className="mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
-                                            Change name
+                                        <Link href={"/changeName"} className=" border mr-1 rounded-3xl border-gray-400 opacity-80 hover:opacity-100 p-1 px-4 r-c-c">
+                                            <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
+                                            Update name
                                         </Link >
-                                        <Link href={"/changeStatus"} className="mr-1 border rounded-3xl border-gray-400 p-1 px-4 r-c-c">
-                                            <svg className="mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
-                                            Change status
+                                        <Link href={"/changeStatus"} className="mr-1 border rounded-3xl border-gray-400 opacity-80 hover:opacity-100 p-1 px-4 r-c-c">
+                                            <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
+                                            Update status
                                         </Link >
-                                        <Link href={"/changePic"} className=" border rounded-3xl border-gray-400 p-1 px-4 r-c-c">
-                                            <svg className="mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
-                                            Change profile picture
+                                        <Link href={"/changePic"} className=" border rounded-3xl border-gray-400 opacity-80 hover:opacity-100 p-1 px-4 r-c-c">
+                                            <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path> <path d="M13.5 6.5l4 4"></path> <path d="M16 19h6"></path> </svg>
+                                            Update photo
                                         </Link >
                                     </div>
                                     <div className="w-full r-e-c mt-5">

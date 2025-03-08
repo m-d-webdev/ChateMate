@@ -1,6 +1,5 @@
 .spinner {
-    width: 26px;
-    height: 26px;
+
     border-radius: 50%;
    animation: spinner-zp9dbg 1s infinite linear;
  }

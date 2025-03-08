@@ -10,6 +10,7 @@ const SayHiBTN = ({ mate }) => {
 
   const [isLoading, setLoading] = useState(false);
   const { mates, setMates, matesReqs, setMatesReqs, thisUser } = useFriends()
+  console.log(mates);
 
   const sendSayHeight = async () => {
     setLoading(true);
@@ -18,7 +19,6 @@ const SayHiBTN = ({ mate }) => {
     setMatesReqs(pv => [...pv, res.data]);
     setLoading(false);
   };
-  console.log(matesReqs);
 
 
 
@@ -27,29 +27,30 @@ const SayHiBTN = ({ mate }) => {
 
 
       {
-        mates.some(m => m._id == mate._id) &&
-        <span className='opacity-70'>
+        mates.some(m => m.mate?._id == mate._id) &&
+        <span className='opacity-80 r-c-c'>
           In your contact
+          <svg className='ml-2' xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24" fill="none" stroke="currentColor"  strokeLinecap="round" strokeLinejoin="round" width={32} height={32}  strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path> <path d="M15 19l2 2l4 -4"></path> </svg> 
         </span>
       }
       {
         matesReqs.some(m => m.to == mate._id && m.type == "direct") &&
         <div className='w-full r-e-c'>
-          <p>Request sent </p>
+          <p className='mr-2 opacity-80'>Request sent </p>
           <BtnOpenChat userName={mate.userName} />
         </div>
       }
       {
-        matesReqs.some(m => m.to == thisUser._id && m.type == "direct") &&
+        matesReqs.some(m => m.to == thisUser._id && m.senderId == mate._id) &&
         <div className='w-full  c-e-e'>
           <p className='mb-2 opacity-80'>You received a chat request from this person</p>
-          <BtnAcceptMate userId={mate._id} />
+          <BtnAcceptMate userId={mate._id} mate={mate} />
         </div>
       }
       {
-        !matesReqs.some(m => m.to == thisUser._id && m.type == "direct") &&
+        !matesReqs.some(m => m.to == thisUser._id && m.senderId == mate._id) &&
         !matesReqs.some(m => m.to == mate._id && m.type == "direct") &&
-        !mates.some(m => m.participants.includes(mate._id)) &&
+        !mates.some(m => m.mate._id == mate._id) &&
 
         <button onClick={sendSayHeight} className=' border rounded-3xl border-gray-600 opacity-80 hover:opacity-100  p-1 px-4 font-bold r-c-c'>
           {

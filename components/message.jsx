@@ -29,7 +29,7 @@ const Message = ({ m }) => {
                         alt=""
                         className='img w-7 h-7'
                     />
-                    <AiResponseContent className={"max-w-4xl text-sm mr-4"} aiResponse={m.content} />
+                    <AiResponseContent className={"max-w-4xl p-2 rounded-2xl bg-white  text-sm mr-4"} aiResponse={m.content} />
 
                     {/* <p className="bg-gray-100 text-sm p-4 ml-4 rounded-lg max-w-4xl">{m.content}</p> */}
                 </div>

@@ -10,7 +10,7 @@ const page = () => {
 
     const [isLoading, setLoading] = useState(false)
     const [emailOrName, setEmail] = useState('')
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState("111111")
     const [isError, setError] = useState(false)
 
     const handelLogin = async (e) => {
@@ -44,8 +44,14 @@ const page = () => {
                             <p className="op-70 ml-3">Log in to your account</p>
                         </div>
                     </div>
-                    <div className="c-s-s w-full">
 
+                    <div className="c-s-s w-full">
+                        {
+                            isError &&
+                            <p className="text-red-500">
+                                Sorry, login failed. Please check your credentials and try again
+                            </p>
+                        }
                         <CustomInput
                             Svg={({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28"></path> </svg>}
                             label={"Email"}
@@ -75,10 +81,10 @@ const page = () => {
                             Forgot Password?
                         </Link>
                         <div className="w-full  max-w-md mt-5 r-e-c">
-                            <button onClick={handelLogin} disabled={!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailOrName) || password == ""} className='bg-black disabled:opacity-70 text-white px-10 py-1 rounded-md r-c-c font-bold'>
+                            <button onClick={handelLogin} disabled={emailOrName == "" || password == ""} className='bg-black disabled:opacity-70 text-white px-10 py-1 rounded-md r-c-c font-bold'>
                                 {
                                     isLoading ?
-                                        <Spinner isWhite={true}/>
+                                        <Spinner isWhite={true} />
                                         :
                                         <>
                                             Login

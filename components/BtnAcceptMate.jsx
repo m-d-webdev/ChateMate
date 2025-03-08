@@ -4,16 +4,16 @@ import React, { useState } from 'react'
 import Spinner from './loaders/Spinner';
 import { useFriends } from '@/app/user/profile/FriendProvider';
 
-const BtnAcceptMate = ({ userId }) => {
+const BtnAcceptMate = ({ userId, mate }) => {
   const [isLoading, setLoading] = useState(false);
-  const {  setMates, matesReqs, setMatesReqs } = useFriends()
+  const { setMates, matesReqs, setMatesReqs } = useFriends()
 
   const sendAcceptMate = async () => {
     setLoading(true);
     let res = await api.post('/meetMates/accept', { mateId: userId })
     if (res.status == 200) {
-      setMatesReqs(matesReqs.filter(e => e.senderId == userId))
-      setMates(pv => [...pv, res.data])
+      setMatesReqs(matesReqs.filter(e => e.senderId != userId))
+      setMates(pv => [...pv, { chat_id: res.data.chat_id, mate, lastMessages: {} }])
     }
 
     setLoading(false);

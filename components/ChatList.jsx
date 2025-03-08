@@ -21,7 +21,7 @@ const ChatList = async () => {
             </div>
 
           
-            {/* <ListChatsCLient list={} /> */}
+            <ListChatsCLient  />
         </div>
     )
 }

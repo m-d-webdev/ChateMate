@@ -27,7 +27,7 @@ const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => 
             <div className="w-full r-e-c mt-6">
                 {
                     isWaitinForRespose ?
-                        <Spinner />
+                        <Spinner borderWidth={3} width={20} height={20}  />
                         :
                         <>
                             <button className='bg-black p-2 rounded-full opacity-70 hover:opacity-100 mr-4'>

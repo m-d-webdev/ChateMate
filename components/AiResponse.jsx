@@ -17,7 +17,7 @@ const AIResponse = ({ text }) => {
 
     
     return (
-        <div className={` ml-4 text-sm max-w-4xl aiResponse `} >
+        <div className={` ml-4 text-sm max-w-4xl bg-white p-2 drop-shadow-sm rounded-lg rounded-tl-none `} >
             <div dangerouslySetInnerHTML={{ __html: formattedText }} />
         </div>
     );

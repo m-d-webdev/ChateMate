@@ -1,9 +1,11 @@
 "use client";
+import { useFriends } from '@/app/user/profile/FriendProvider';
 import React from 'react'
+import FriendComp from './friendComp';
 
 const ListChatsCLient = () => {
-    const { mates, setMates, matesReqs, setMatesReqs, thisUser } = useFriends()
-    
+    const { mates } = useFriends()
+
     return (
         <>
             <div className="w-full mt-8 rounded-3xl border r-s-c p-2">
@@ -11,9 +13,9 @@ const ListChatsCLient = () => {
                 <input type="text" placeholder='Search' className='ml-4 border-none outline-none w-full' />
             </div>
             <div className="h-full w-full c-s-c mt-2 overflow-auto scrl_none">
-                {/* {
-                    list.map(u => <FriendComp data={u} key={u.id} />)
-                } */}
+                {
+                    mates.map((u, i) => <FriendComp data={u} key={i} />)
+                }
             </div>
         </>
     )
