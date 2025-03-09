@@ -10,7 +10,8 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["i.pinimg.com","localhost"]
-  }
+    domains: ["i.pinimg.com", "localhost"]
+  },
+  reactStrictMode: false
 };
 export default nextConfig;

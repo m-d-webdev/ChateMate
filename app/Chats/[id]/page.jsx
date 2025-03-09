@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Aoboshi_One } from 'next/font/google'
 import Message from '@/components/message';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import InputMessage2 from '@/components/InputMessage2';
 import ChatHead from '@/components/chatHead';
 import { api } from '@/utilityfunctions';
@@ -11,30 +11,29 @@ import Spinner from '@/components/loaders/Spinner';
 import { UseAllChats } from '../MessagesProvider';
 import FriendMessage from '@/components/Friendmessage';
 import { useFriends } from '@/app/user/profile/FriendProvider';
-const aoboshi_One = Aoboshi_One({
-    subsets: ['latin'],
-    weight: ['400']
-})
+import { SetMessagesSeen } from '@/config/socket';
+import { ChatContext } from './layout';
+import MessageTypeFile from '@/components/MessageTypeFile';
+
+export let DeclareCurrentFriendTyping;
+
 const page = ({ params }) => {
+
     const { id } = React.use(params);
+
     const { allChats, setChats } = UseAllChats();
     const { thisUser, mates } = useFriends();
     const [IsLoading, setIsLoading] = useState(false);
-    const [focusedMate, setFocusedMate] = useState(mates.find(r => r.chat_id == id)?.mate);
+    const { GlobalFocusedMate, isFocusedUserTyping } = useContext(ChatContext)
 
     useEffect(() => {
         if (!allChats[id]) {
             GetChatMessages()
         }
-    }, []);
-
-    useEffect(() => {
-        setFocusedMate(mates.find(r => r.chat_id == id)?.mate)
-    }, [mates, id])
+        SetMessagesSeen(id, GlobalFocusedMate?._id);
+    }, [])
 
     const listMessagesRef = useRef();
-
-
     const GetChatMessages = async () => {
         setIsLoading(true);
         let res = await api.post("/chat/GetChatMessages", { chat_id: id })
@@ -50,32 +49,16 @@ const page = ({ params }) => {
         setIsLoading(false);
     }
 
-    const handelAddMessage = e => {
-        console.log('get an to add right now ');
-        
-        setChats(pv => (
-            {
-                ...pv,
-                [id]: [...pv[id], e]
-            }
-        ));
-    }
 
     useEffect(() => {
         listMessagesRef.current?.scrollTo({
             top: listMessagesRef.current?.scrollHeight,
+            behavior: "smooth"
         })
     }, [allChats[id]])
     return (
-        <div className="h-full  w-full c-b-c max-w-6xl px-4 ">
-            {
-                focusedMate ?
-                    <ChatHead data={focusedMate} />
-                    :
-                    <div className="w-full ">
-                        <Spinner height={20} width={20} borderWidth={3} />
-                    </div>
-            }
+        <>
+
             {
                 IsLoading ?
                     <div className='h-full w-full c-c-c ' >
@@ -95,24 +78,29 @@ const page = ({ params }) => {
                                     {
                                         allChats[id]?.map(m => {
                                             m.isFromMe = m.senderId == thisUser?._id;
-                                            return <FriendMessage m={m} key={m._id} />
+                                            if (m.type == "text") {
+                                                return <FriendMessage m={m} key={m._id} />
+                                            } else {
+                                                return <MessageTypeFile message={m} key={m._id} />
+                                            }
                                         })
+                                    }
+                                    {
+                                        isFocusedUserTyping &&
+                                        <div className="r-s-c  mb-8">
+                                            <div className="bg-white p-2 px-4 rounded-3xl">
+                                                <div className='dots  '></div>
+                                            </div>
+                                        </div>
                                     }
                                 </div>
                         }
                     </>
             }
 
-            {
-                focusedMate ?
-                    <InputMessage2 chat_id={id} focusedMate={focusedMate} onMessageSent={handelAddMessage} />
-                    :
-                    <div className="w-full ">
-                        <Spinner height={17} width={17} borderWidth={3} />
-                    </div>
-            }
 
-        </div>
+
+        </>
 
     )
 }

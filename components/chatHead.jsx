@@ -1,8 +1,10 @@
 "use client";
 import React from 'react'
 import Image from 'next/image';
+import { useFriends } from '@/app/user/profile/FriendProvider';
 
-const ChatHead = ({ data }) => {
+const ChatHead = ({ data, isFocusedUserTyping }) => {
+    const { ActiveMates } = useFriends()
     return (
         <div className=" bg-white drop-shadow rounded-3xl p-2 r-b-c w-full">
             <div className="r-s-s">
@@ -12,12 +14,21 @@ const ChatHead = ({ data }) => {
                     className='img w-12 h-12'
                 />
 
-                <div className="r-s-c ml-4 mt-2">
-                    <h1 className='text-base'>{data?.fullName}</h1>
-                    <span className="r-s-s text-green-500 text-sm ml-4">
-                        <div className="w-2 h-2 mr-2 rounded-full bg-green-500"></div>
-                        On line
-                    </span>
+                <div className="r-s-s ml-4 mt-2">
+                    <div className="c-s-s">
+                        <h1 className='text-base'>{data?.fullName}</h1>
+                        {
+                            isFocusedUserTyping &&
+                            <div className=" r-s-c w-full  text-xs  opacity-80 text-blue-500">typing <div className="dots ml-1"></div> </div>
+                        }       
+                    </div>
+                    {
+                        ActiveMates?.includes(data?._id) &&
+                        <span className="r-s-s text-green-500 text-sm ml-4">
+                            <div className="w-2 h-2 mr-2 rounded-full bg-green-500"></div>
+                            On line
+                        </span>
+                    }
                 </div>
 
             </div>

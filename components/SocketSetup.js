@@ -2,10 +2,10 @@
 import { StartSocket } from '@/config/socket';
 import React, { useEffect } from 'react'
 
-const SocketSetup = ({ clientId }) => {
+const SocketSetup = ({ clientId, friendsIds }) => {
 
     useEffect(() => {
-        StartSocket(clientId)
+        StartSocket(clientId, friendsIds)
     }, [])
     return (<></>)
 }

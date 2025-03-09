@@ -9,11 +9,10 @@ const MessagesProvider = ({ children }) => {
     const { thisUser } = useFriends()
     const value = useMemo(() => {
         return { allChats, setChats }
-    }, [allChats])
-
+    }, [allChats])  
+    
 
     AddMessgeFromSocket = e => {
-        console.log('still adding messages  ---');
         if (allChats[e.chat_id]) {
             setChats(pv => ({ ...pv, [e.chat_id]: [...pv[e.chat_id], e] }))
         } else {
@@ -23,14 +22,15 @@ const MessagesProvider = ({ children }) => {
     }
 
     UpdateMessToSeen = e => {
-        console.log('update to set seen ---');
-        
+
         if (allChats[e.chat_id]) {
-            setChats(pv => ({ ...pv, [e.chat_id]: pv[e.chat_id].map(c => c.senderId == thisUser._id ? { ...c, readBy: [...c.readBy, e.reader] } : c) }))
+            // setChats(pv => ({ ...pv, [e.chat_id]: pv[e.chat_id].map(c => c.senderId == thisUser._id ? { ...c, readBy: [...c.readBy, e.reader] } : c) }))
+            if (e.reader == "me") {
+                setChats(pv => ({ ...pv, [e.chat_id]: pv[e.chat_id].map(c => ({ ...c, readBy: [...c.readBy, thisUser._id] })) }))
+            } else {
+                setChats(pv => ({ ...pv, [e.chat_id]: pv[e.chat_id].map(c => ({ ...c, readBy: [...c.readBy, e.reader] })) }))
+            }
         }
-        //  else {
-        //     setChats(pv => ({ ...pv, [e.chat_id]: [e] }))
-        // }
     }
 
 
