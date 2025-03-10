@@ -4,8 +4,9 @@ import { AnimatePresence } from 'framer-motion'
 import Spinner from './loaders/Spinner'
 import { UseAllChats } from '@/app/Chats/MessagesProvider'
 import { useFriends } from '@/app/user/profile/FriendProvider'
+import { EncodMessage } from '@/utilityfunctions'
 
-const BtnUploadFiles = ({ chat_id, focusedMate }) => {
+const BtnUploadFiles = ({ chat_id }) => {
     const [isDialogAddFileVSBL, setDialogAddFileVSBL] = useState(false)
     const [isSendingFiles, setSendingFiles] = useState(false);
     const { setChats } = UseAllChats()
@@ -21,7 +22,7 @@ const BtnUploadFiles = ({ chat_id, focusedMate }) => {
                 GroupMessages.push({ ...ms, recievedBy: [], readBy: [], senderId: thisUser._id })
             })
         )
-        
+
         setChats((prevChats) => {
             return {
                 ...prevChats,
@@ -42,12 +43,12 @@ const BtnUploadFiles = ({ chat_id, focusedMate }) => {
                     reader.onload = async () => {
                         let messageId = `${Date.now()}-${thisUser._id}${Math.random() * 684}`;
                         let now = new Date();
-                        const HollMessage = { content: { name: file.name, type: file.type, data: reader.result }, type: file.type, chat_id, _id: messageId, sendAt: now };
-
+                        let HollMessage = { content: reader.result, isSent: false, type: file.type, chat_id, _id: messageId, sendAt: now };
+                        HollMessage = EncodMessage(HollMessage);
                         resolve(HollMessage)
                     }
-                    reader.readAsArrayBuffer(file)
 
+                    reader.readAsArrayBuffer(file);
 
                 } catch (error) {
                     console.log(error);

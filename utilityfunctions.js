@@ -4,12 +4,62 @@ export const api = axios.create(
     {
         baseURL: "http://localhost:5000",
         headers: {
-            Authorization: `Bearer ${Cookies.get('token') ? Cookies.get('token'):null}`
+            Authorization: `Bearer ${Cookies.get('token') ? Cookies.get('token') : null}`
         },
-        withCredentials:true
+        withCredentials: true
     }
 )
+// --------------
 
+
+export const EncodMessage = (m) => {
+    try {
+
+        if (m.type == "text") {
+            m.content = btoa(m.content);
+            console.log(m);
+            return m;
+        } else {
+            console.log('we will encode this =>', m.content);
+
+            let ToUint8Array = new Uint8Array(m.content);
+
+            let binaryed = String.fromCharCode(...ToUint8Array);
+
+            let Codedbase64 = btoa(binaryed);
+
+            m.content = Codedbase64;
+            console.log('this is the result =>' ,m);
+            
+            return m
+
+        }
+    } catch (error) {
+        return m
+    }
+}
+
+export const DecodMessage = (m) => {
+    try {
+
+        if (m.type == "text") {
+
+            m.content = atob(m.content);
+            return m;
+
+        } else {
+
+            let decodedBinary = atob(m.content);
+            let uint8Array = new Uint8Array([...decodedBinary].map(c => c.charCodeAt(0)));
+            m.content = uint8Array.buffer;
+            return m
+        }
+    } catch (error) {
+        console.log(error);
+
+        return m
+    }
+}
 
 
 // -------------------------------

@@ -21,7 +21,8 @@ const InputMessage2 = ({ chat_id, focusedMate }) => {
 
             const HollMessage = { content: messageContent, type: "text", chat_id, _id: messageId, sendAt: now };
             setMessage("");
-            StopmessageTyping()
+            StopmessageTyping();
+
             await socket.emit("messageSent", { ...HollMessage, SocketTO: focusedMate._id, readBy: [], senderId: thisUser._id }, (cl) => {
                 if (cl.recieved) {
 

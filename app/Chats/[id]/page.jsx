@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { Aoboshi_One } from 'next/font/google'
 import Message from '@/components/message';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import InputMessage2 from '@/components/InputMessage2';
 import ChatHead from '@/components/chatHead';
-import { api } from '@/utilityfunctions';
+import { api, DecodMessage } from '@/utilityfunctions';
 import Spinner from '@/components/loaders/Spinner';
 import { UseAllChats } from '../MessagesProvider';
 import FriendMessage from '@/components/Friendmessage';
@@ -78,12 +78,15 @@ const page = ({ params }) => {
                                     {
                                         allChats[id]?.map(m => {
                                             m.isFromMe = m.senderId == thisUser?._id;
+
                                             if (m.type == "text") {
                                                 return <FriendMessage m={m} key={m._id} />
                                             } else {
                                                 return <MessageTypeFile message={m} key={m._id} />
                                             }
                                         })
+
+
                                     }
                                     {
                                         isFocusedUserTyping &&
