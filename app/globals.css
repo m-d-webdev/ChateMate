@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-weight: 500;
+  /* font-weight: 500; */
   transition: .15s;
 }
 
@@ -258,6 +258,13 @@ svg {
   align-items: center;
 }
 
+.r-w-s-s {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: start;
+}
+
 
 
 .inputCustomInput:not(:placeholder-shown)~.cntSvgCustomInput>*,
@@ -276,6 +283,13 @@ svg {
   display: none;
 }
 
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 .img {
   border-radius: 50%;
@@ -292,16 +306,57 @@ svg {
   left: 0;
   background-color: rgba(0, 0, 0, 0.359);
 }
-h1{
+
+h1 {
   font-weight: 800;
 }
-h2{
+
+h2 {
   font-weight: 700;
-}
-strong{
-  font-weight: 700;
-}
-h2{
-  font-weight: 500;
 }
 
+strong {
+  font-weight: 700;
+}
+
+h2 {
+  font-weight: 600;
+}
+h3 {
+  font-weight: 600;
+}
+p{
+  font-weight: 500;
+}
+.aiResponseStyle h1 {
+  font-size: 22px;
+}
+
+.aiResponseStyle h3 {
+  font-size: 16px;
+}
+
+.aiResponseStyle h2 {
+  font-size: 18px;
+}
+
+.aiResponseStyle ul {
+  padding-left: 10px;
+}
+
+.aiResponseStyle p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+.aiResponseStyle pre {
+  /* font-size: 18px; */
+  background-color: black;
+  padding: 20px;
+  border-radius: 14px;
+  color: #fff;
+  margin: 10px 0;
+}
+.sliderChatList{
+  transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) .7s;
+}

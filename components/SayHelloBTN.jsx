@@ -5,12 +5,14 @@ import Spinner from './loaders/Spinner';
 import { useFriends } from '@/app/user/profile/FriendProvider';
 import BtnOpenChat from './BtnOpenChat';
 import BtnAcceptMate from './BtnAcceptMate';
+import { UseAllChats } from '@/app/Chats/MessagesProvider';
 
 const SayHiBTN = ({ mate }) => {
 
   const [isLoading, setLoading] = useState(false);
-  const { mates, setMates, matesReqs, setMatesReqs, thisUser } = useFriends()
-  console.log(mates);
+  const {  matesReqs, setMatesReqs, thisUser } = useFriends()
+  const {mates} = UseAllChats()
+ 
 
   const sendSayHeight = async () => {
     setLoading(true);

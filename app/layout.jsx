@@ -7,6 +7,7 @@ import { api } from "@/utilityfunctions";
 import { cookies } from "next/headers";
 import FriendProvider from "./user/profile/FriendProvider";
 import MessagesProvider from "./Chats/MessagesProvider";
+import Note from "@/components/Note";
 const poppins = Poppins({ subsets: ['latin'], weight: ['500'] })
 
 export default async function RootLayout({ children, modal }) {
@@ -24,19 +25,22 @@ export default async function RootLayout({ children, modal }) {
       <body
         className={`${poppins.className}  r-s-s`}
       >
-       
+
         <FriendProvider>
           <MessagesProvider>
             <SiadeBare user={user} />
             {children}
             {modal}
+            <Note />
           </MessagesProvider>
         </FriendProvider>
+        <>
+        </>
       </body>
 
 
 
-    </html>
+    </html >
   );
 }
 

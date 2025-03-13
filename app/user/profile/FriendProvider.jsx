@@ -6,45 +6,18 @@ import React from 'react'
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-export let NoticeFriendOnLine;
 
 
 const FriendsContext = createContext();
 
 
 const FriendProvider = ({ children }) => {
-    const [mates, setMates] = useState([]);
-    const [ActiveMates, setActiveMates] = useState([]);
     const [matesReqs, setMatesReqs] = useState([]);
     const [thisUser, setThisUser] = useState(null);
     const [isReady, setReady] = useState(false);
-    
-    NoticeFriendOnLine = data => {
-        if (data.isConnected == true) {
-            setActiveMates(pv => [...pv, data.friendId])
-        }
-        else if (data.isConnected == false) {
-            setActiveMates(ActiveMates.filter(m => m != data.friendId))
-        }
-    }
 
-    const getChatList = async () => {
-        return new Promise(
-            async (resolve, reject) => {
-                try {
-                    await api.get("/user/getChatList").then(res => {
-                        setMates(res.data.chats);
-                        resolve()
-                    })
+ 
 
-                } catch (error) {
-                    reject(error)
-                }
-
-            })
-
-    }
-    
     const getMateReq = async () => {
         return new Promise(
             async (resolve, reject) => {
@@ -78,7 +51,6 @@ const FriendProvider = ({ children }) => {
 
     const GetDependencies = async (params) => {
         await getThisUser();
-        await getChatList();
         await getMateReq();
         setReady(true)
     }
@@ -90,11 +62,8 @@ const FriendProvider = ({ children }) => {
     }, []);
 
     return (
-        <FriendsContext.Provider value={{ mates, setMates, matesReqs, thisUser, setMatesReqs, ActiveMates }} >
-            {
-                isReady &&
-                <SocketSetup clientId={thisUser._id} friendsIds={mates.map(m => m.mate._id)} />
-            }
+        <FriendsContext.Provider value={{  matesReqs, thisUser, setMatesReqs }} >
+           
             {children}
         </FriendsContext.Provider>
     )

@@ -118,7 +118,7 @@ const InputMessage2 = ({ chat_id, focusedMate }) => {
     return (
         <div className='w-full p-2 bg-white drop-shadow rounded-2xl r-b-c'>
             <BtnUploadFiles chat_id={chat_id} focusedMate={focusedMate} />
-            <input onKeyUp={e => e.key == "Enter" && handelSendMessage(e)} onChange={e => { handelSendImTyping(e.target.value != ""); setMessage(e.target.value); }} value={messageContent} type="text" placeholder={`Message ${focusedMate.fullName}...`} className='font-md border-none placeholder:text-sm   text-md outline-none bg-transparent w-full  ' />
+            <input onKeyUp={e => e.key == "Enter" && handelSendMessage(e)} onChange={e => { handelSendImTyping(e.target.value != ""); setMessage(e.target.value); }} autoComplete='off' value={messageContent} type="text" placeholder={`Message ${focusedMate.fullName}...`} className='font-md border-none placeholder:text-sm   text-md outline-none bg-transparent w-full  ' />
             <div className=" r-e-c ">
                 <BtnRecordAudio onWordsReayd={words => { handelSendMessageViaMic(words) }} />
                 <button onClick={handelSendMessage} className='bg-black p-2 rounded-full opacity-70 hover:opacity-100 '>

@@ -5,23 +5,24 @@ import InputMessage2 from '@/components/InputMessage2';
 import Spinner from '@/components/loaders/Spinner';
 import { useParams } from 'next/navigation';
 import { createContext, useEffect, useState } from 'react'
-// export let setGlobalForcuedMate;
+import { UseAllChats } from '../MessagesProvider';
+export let getGlobalForcuedMate;
 export let AddFocusedFriendTyping, UnsetFocusedFriendTyping;
 
 export const ChatContext = createContext()
 
 const layout = ({ children }) => {
     const { id } = useParams();
-    const { thisUser, mates } = useFriends();
+    const { mates } = UseAllChats()
     const [GlobalFocusedMate, setGlobalFocusedMate] = useState(mates.find(r => r.chat_id == id)?.mate);
     const [isFocusedUserTyping, setFocuedUserTyping] = useState(false)
-
+    getGlobalForcuedMate = () => GlobalFocusedMate
     AddFocusedFriendTyping = friendId => {
         if (GlobalFocusedMate._id == friendId) {
             setFocuedUserTyping(true)
         }
     }
-
+    
     UnsetFocusedFriendTyping = friendId => {
         if (GlobalFocusedMate._id == friendId) {
             setFocuedUserTyping(false)

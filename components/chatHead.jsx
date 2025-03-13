@@ -1,10 +1,10 @@
 "use client";
 import React from 'react'
 import Image from 'next/image';
-import { useFriends } from '@/app/user/profile/FriendProvider';
+import { UseAllChats } from '@/app/Chats/MessagesProvider';
 
 const ChatHead = ({ data, isFocusedUserTyping }) => {
-    const { ActiveMates } = useFriends()
+    const { ActiveMates } = UseAllChats()
     return (
         <div className=" bg-white drop-shadow rounded-3xl p-2 r-b-c w-full">
             <div className="r-s-s">
@@ -20,7 +20,7 @@ const ChatHead = ({ data, isFocusedUserTyping }) => {
                         {
                             isFocusedUserTyping &&
                             <div className=" r-s-c w-full  text-xs  opacity-80 text-blue-500">typing <div className="dots ml-1"></div> </div>
-                        }       
+                        }
                     </div>
                     {
                         ActiveMates?.includes(data?._id) &&

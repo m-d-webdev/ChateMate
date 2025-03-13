@@ -3,10 +3,12 @@ import { api } from '@/utilityfunctions';
 import React, { useState } from 'react'
 import Spinner from './loaders/Spinner';
 import { useFriends } from '@/app/user/profile/FriendProvider';
+import { UseAllChats } from '@/app/Chats/MessagesProvider';
 
 const BtnAcceptMate = ({ userId, mate }) => {
   const [isLoading, setLoading] = useState(false);
-  const { setMates, matesReqs, setMatesReqs } = useFriends()
+  const {  setMatesReqs } = useFriends();
+  const {setMates, matesReqs} = UseAllChats()
 
   const sendAcceptMate = async () => {
     setLoading(true);

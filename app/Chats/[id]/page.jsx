@@ -21,8 +21,8 @@ const page = ({ params }) => {
 
     const { id } = React.use(params);
 
-    const { allChats, setChats } = UseAllChats();
-    const { thisUser, mates } = useFriends();
+    const { allChats, mates, setChats } = UseAllChats();
+    const { thisUser } = useFriends();
     const [IsLoading, setIsLoading] = useState(false);
     const { GlobalFocusedMate, isFocusedUserTyping } = useContext(ChatContext)
 
@@ -78,12 +78,14 @@ const page = ({ params }) => {
                                     {
                                         allChats[id]?.map(m => {
                                             m.isFromMe = m.senderId == thisUser?._id;
-
                                             if (m.type == "text") {
+
                                                 return <FriendMessage m={m} key={m._id} />
+
                                             } else {
                                                 return <MessageTypeFile message={m} key={m._id} />
                                             }
+
                                         })
 
 

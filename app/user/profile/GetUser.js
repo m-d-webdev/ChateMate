@@ -11,6 +11,7 @@ const GetUser = async () => {
         if (err) return null;
         user = decoded.user
     });
+    
     return user
 }
 

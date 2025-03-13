@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react'
 import Spinner from './loaders/Spinner';
+import BtnRecordAudio from './BTNRecordAudio';
 
 const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => { }, isWaitinForRespose = false }) => {
     const inpTextRef = useRef();
@@ -27,12 +28,10 @@ const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => 
             <div className="w-full r-e-c mt-6">
                 {
                     isWaitinForRespose ?
-                        <Spinner borderWidth={3} width={20} height={20}  />
+                        <Spinner borderWidth={3} width={20} height={20} />
                         :
                         <>
-                            <button className='bg-black p-2 rounded-full opacity-70 hover:opacity-100 mr-4'>
-                                <svg className='stroke-white w-6 h-6 stroke-2' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z"></path> <path d="M5 10a7 7 0 0 0 14 0"></path> <path d="M8 21l8 0"></path> <path d="M12 17l0 4"></path> </svg>
-                            </button>
+                            <BtnRecordAudio onWordsReayd={words => { setMessage(words); onChange(words) }} />
 
                             {
                                 message.trim().length > 0 &&

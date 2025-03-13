@@ -1,187 +1,103 @@
-"use client";
-import WriteMessage from '@/components/WriteMessage';
+"use server"
 import Image from 'next/image';
 import { Aoboshi_One } from 'next/font/google'
-import React, { useEffect, useRef, useState } from 'react'
-import Message from '@/components/message';
-import { AnimatePresence, motion } from 'framer-motion';
-import { _onClickOutElem, api } from '@/utilityfunctions';
-import Loader from '@/components/loaders/Loader';
-import Cookies from 'js-cookie';
+// import { useRouter } from 'next/router';
+import GetUser from '../user/profile/GetUser';
+import WriteMessage from '@/components/WriteMessage';
+import Link from 'next/link';
+import { EncodMessage } from '@/utilityfunctions';
+
 const aoboshi_One = Aoboshi_One({
     subsets: ['latin'],
     weight: ['400']
-})
-const page = () => {
-    const [user, setUser] = useState(null);
-    const getCurrentUser = async () => {
-        if (Cookies.get("token")) {
-            const res = await api.get("/user/get")
-            setUser(res.data.user)
-        }
-    }
-
-    useEffect(() => {
-        getCurrentUser()
-    }, [])
-
-    const [isMenuOpened, setMenuOpened] = useState(false)
-    const [MyMessages, setMyMessages] = useState([]);
-    const [FaileToResponse, setFaileToResponse] = useState(false);
-    const [messages, setMessages] = useState([]);
-
-    const [NewMessage, setNewMessage] = useState("")
-    const menuRef = useRef();
-
-    const [isWaitingForResponse, setWaitingForResponse] = useState(false)
-    const messageContainerRef = useRef()
+});
 
 
-    const SendMessage = async () => {
-        setWaitingForResponse(true);
-
-        let chatHistroy = messages.map(m => ({ role: m.isFromMe ? "user" : "assistant", content: m.content })).slice(-5);
-
-        chatHistroy.push(
-            {
-                role: "user",
-                content: NewMessage
-            }
-        )
-
-
-        setMessages(pv => ([
-            ...pv,
-            {
-                content: NewMessage,
-                isFromMe: true,
-                img: user ? user.pic : "https://i.pinimg.com/236x/57/00/c0/5700c04197ee9a4372a35ef16eb78f4e.jpg",
-            }
-        ]))
-        setNewMessage("");
-
-        let res = await api.post("/owlia/ask", { chatHistroy })
-
-
-        if (res.status == 200) {
-            setMessages(pv => ([
-                ...pv,
-                {
-                    content: res.data.answer.reply,
-                    isFromMe: false,
-                    img: "/icones/owliaLogo.svg",
-                }
-            ]))
-            messageContainerRef.current.scrollTo({
-                top: messageContainerRef.current?.scrollHeight - 300,
-                behavior: "smooth"
-            })
-
-        } else {
-            setFaileToResponse(true)
-        }
-
-        setWaitingForResponse(false);
-    }
-
-
-
-    useEffect(() => {
-        if (menuRef.current) {
-            _onClickOutElem(menuRef.current, () => setMenuOpened(false))
-        }
-    }, [isMenuOpened])
-
+const page = async () => {
+    const user = await GetUser();
     return (
-        <div className='w-full r-b-s p-4 h-screen'>
-            <div className="r-s-c">
-                <Image
 
-                    src={'/icones/owliaLogo.svg'}
-                    width={30}
-                    height={30}
-                    alt='owliaLogo'
-                    className='mr-3'
-                />
-                <h1 className='font-bold text-xl'>Owlia</h1>
+        <div className="h-full w-full max-w-screen-lg  overflow-auto scrl_none  c-s-c">
+
+            <Image
+                src={'/icones/owliaLogo.svg'}
+                width={120}
+                height={120}
+                className=' mb-12'
+                alt='owliaLogo'
+            />
+
+
+            <div className={` tracking-[.1px] mt-4 ${aoboshi_One.className}  text-center`}>
+                <p className='text-xl font-medium  opacity-80'>
+
+                    <span className='text-2xl font-semibold  opacity-100 '>  Welcome! </span>
+                    This is Owlia, an AI that you can interact with freely. It understands multiple languages, including Arabic and French, and is used in a straightforward way to assist you with your requests.
+                </p>
+
+                <p className='text-xl mt-4  font-medium opacity-80'>
+                    You also have the option to save your chat history. However, keep in mind that saved messages are not encrypted, so avoid sharing sensitive information.
+                </p>
             </div>
 
-            <div className="h-full w-full  max-w-6xl c-c-c">
-                {
-                    messages.length == 0 ?
-                        <div className='c-c-c mb-20'>
-                            <Image
-                                src={'/icones/owliaLogo.svg'}
-                                width={80}
-                                height={80}
-                                alt='owliaLogo'
-                            />
-                            <h1 className={`text-3xl tracking-[.1px] mt-4 ${aoboshi_One.className}`}>
-                                What's up ? Let’s chat and have a good time!
-                            </h1>
-                        </div>
-                        :
-                        <div style={{ paddingBottom: `${messageContainerRef.current?.offsetHeight - 100}px` }} ref={messageContainerRef} className='h-full scrl_none pt-10 mb-2 w-full max-h-full overflow-auto ' >
-                            {
-                                messages.map((m, i) => <Message m={m} key={i} />)
-                            }
+            <Link href={`/Owlia/chats/${user?.userName}${Date.now()}`} className='p-2 px-8 rounded-3xl r-c-c mt-8 bg-black text-white font-semibold'>
+                Start a new chat with owlia
+                <svg className='ml-2 stroke-2' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M18 15l3 -3l-3 -3"></path> <path d="M3 12h18"></path> <path d="M3 9v6"></path> </svg>
+            </Link>
 
-                            {
-                                isWaitingForResponse &&
-                                <div className="w-full r-s-c">
-                                    <Loader height={70} />
-                                </div>
-                            }
-                            {
-                                FaileToResponse &&
-                                <p className="text-red-500 ">
-                                    Owlia encountered an error and could not respond
-                                </p>
-                            }
-                        </div>
+            <div className="c-s-s mt-8 w-full ">
+                <div className="c-s-s mb-8">
+                    <h3 className='opacity-70'>Casual Conversation</h3>
+                    <div className="r-w-s-s w-full mt-2">
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Hey, how's your day going?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Hey, how's your day going?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Tell me something interesting!")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Tell me something interesting!</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("What's new in tech these days?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>What's new in tech these days?</Link>
 
-                }
-                <WriteMessage
-                    onChange={e => setNewMessage(e)}
-                    className={''}
-                    onSend={SendMessage}
-                    value={NewMessage}
-                    isWaitinForRespose={isWaitingForResponse}
-                    placeholder={"Ask Owlia anything .. "}
-                />
+                    </div>
+                </div>
+
+                <div className="c-s-s mb-8">
+                    <h3 className='opacity-70'>Learning & Knowledge</h3>
+                    <div className="r-w-s-s w-full mt-2">
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Can you explain quantum physics in simple terms?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Can you explain quantum physics in simple terms?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("How does machine learning work?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>How does machine learning work?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Tell me about the history of Morocco.")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Tell me about the history of Morocco.</Link>
+
+                    </div>
+                </div>
+
+                <div className="c-s-s mb-8">
+                    <h3 className='opacity-70'>Creative & Fun</h3>
+                    <div className="r-w-s-s w-full mt-2">
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Can you write me a short sci-fi story?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Can you write me a short sci-fi story?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("If you were a superhero, what powers would you have?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>If you were a superhero, what powers would you have?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Describe a futuristic city in 2050.")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Describe a futuristic city in 2050.</Link>
+
+                    </div>
+                </div>
+
+                <div className="c-s-s mb-8">
+                    <h3 className='opacity-70'>Problem-Solving & Advice</h3>
+                    <div className="r-w-s-s w-full mt-2">
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("I need help debugging my JavaScript code.")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>I need help debugging my JavaScript code.</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("What's the best way to learn a new language?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>What's the best way to learn a new language?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("How do I improve my interview skills?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>How do I improve my interview skills?</Link>
+
+                    </div>
+                </div>
+
+                <div className="c-s-s mb-8">
+                    <h3 className='opacity-70'>Personalized Topics</h3>
+                    <div className="r-w-s-s w-full mt-2">
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("I want to practice my English—can we have a conversation?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>I want to practice my English—can we have a conversation?</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("Give me some ideas for my website.")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>Give me some ideas for my website.</Link>
+                        <Link href={`/Owlia/chats/${user?.userName}${Date.now()}/${encodeURIComponent("How can I optimize my online business?")}`} className={`hover:scale-105 font-semibold  hover:drop-shadow-lg cursor-pointer ml-2 p-2 px-4 border border-gray-200 bg-white   rounded-xl mt-2 ${aoboshi_One.className}`}>How can I optimize my online business?</Link>
+
+                    </div>
+                </div>
             </div>
-            <div className="c-s-s relative  h-full ">
-                <AnimatePresence>
-                    {
-                        isMenuOpened &&
-                        <motion.div
-                            ref={menuRef}
-                            initial={{
-                                width: 10,
-                            }}
-                            exit={{
-                                width: 10,
-                            }}
-                            animate={{
-                                width: "300px",
-                                transition: {
-                                    type: "keyframes"
-                                }
-                            }}
-                            className="h-full p-3 c-s-s p10 rounded-xl bg-white max-h-screen overflow-hidden  z-10" style={{
-                                filter: "drop-shadow(-5px 0px 6px var(--filter-color))"
-                            }}>
-                        </motion.div>
-
-                    }
-                </AnimatePresence>
-                <button onClick={() => setMenuOpened(!isMenuOpened)} className='absolute bg-white p-2 rounded-xl top-3   right-2'>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 6h16"></path> <path d="M7 12h13"></path> <path d="M10 18h10"></path> </svg>
-                </button>
-            </div>
-
-
         </div>
+
     )
 }
 

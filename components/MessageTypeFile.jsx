@@ -1,8 +1,12 @@
 import { ChatContext } from '@/app/Chats/[id]/layout';
+import { UseAllChats } from '@/app/Chats/MessagesProvider';
 import { useFriends } from '@/app/user/profile/FriendProvider';
 import { GetSocket } from '@/config/socket';
-import { api, CorrectTime, DecodMessage, EncodMessage } from '@/utilityfunctions';
+import { api, CorrectTime, DecodMessage, EncodMessage, SendFileAsCunks } from '@/utilityfunctions';
+import { m } from 'framer-motion';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { OpenNote } from './Note';
+import Spinner from './loaders/Spinner';
 
 const BtnSendFile = ({ isSent, isSending, onClick }) => {
     return (
@@ -15,8 +19,8 @@ const BtnSendFile = ({ isSent, isSending, onClick }) => {
                     <>
                         {
                             isSending ?
-                                <span className='ml-4 text-blue-500 font-semibold'>
-                                    sending..
+                                <span className='ml-4 r-s-c text-blue-500 font-semibold'>
+                                    <Spinner height={20} width={20} borderWidth={4} brColor1='#1573ff' brColor2='#1573ff4c' />   <p className="ml-2"></p>sending..
                                 </span>
                                 :
                                 <button onClick={onClick} className='p-1 px-2 border border-gray-400  rounded-2xl text-sm font-semibold opacity-70 r-s-c  ml-4 '>
@@ -91,20 +95,29 @@ const UploaderElem = ({ height, isSending, isSent }) => {
     )
 }
 const MessageTypeFile = ({ message }) => {
-    console.log('this is the message at first =>', message);
 
-    message = DecodMessage(message)
+    if (typeof (message.content) == "string") {
+        message = DecodMessage(message);
+    }
     let type = message.type;
     type = type?.substring(0, type.indexOf("/"));
+    let blob;
+    if (message.content instanceof ArrayBuffer) {
 
-    let blob = new Blob([message.content], { type: message.type });
+        blob = new Blob([message.content], { type: message.type });
+
+    } else {
+
+        blob = new Blob(message.content, { type: message.type });
+
+    }
     const src = URL.createObjectURL(blob);
     const { GlobalFocusedMate } = useContext(ChatContext);
-
+    const { UpdateMessageToSent } = UseAllChats();
     // ---------------------------
     const [isSending, setSending] = useState(false)
     const containerMediaRef = useRef();
-    const { ActiveMates } = useFriends();
+    const { ActiveMates } = UseAllChats();
 
     const handelSendFile = async () => {
         setSending(true);
@@ -112,23 +125,61 @@ const MessageTypeFile = ({ message }) => {
 
             const socket = GetSocket()
             if (socket) {
-                let EncodedMessa = EncodMessage(message)
-                socket.emit("messageSent", { ...EncodedMessa, SocketTO: GlobalFocusedMate?._id }, (res) => {
-                    console.log(res);
-                    setSending(false);
-                })
+                let EncodedMessa = message;
+
+                if (typeof (message.content) != "object" && GlobalFocusedMate) {
+                    EncodedMessa = DecodMessage(message);
+                }
+
+                if (typeof (EncodedMessa.content) == "object" && EncodedMessa.content.byteLength > 1048576) {
+                    SendFileAsCunks({ ...EncodedMessa, SocketTO: GlobalFocusedMate?._id }).then(async res => {
+                        UpdateMessageToSent({ chat_id: message.chat_id, _id: message._id })
+                        setSending(false);
+                    })
+                }
+                else {
+
+                    socket.emit("messageSent", { ...message, SocketTO: GlobalFocusedMate?._id }, (cl) => { })
+
+                    if (type == "image") {
+                        let EncodedMessa = EncodMessage(message);
+                        api.post("/chat/addMessage", { ...EncodedMessa, isSent: true, recievedBy: [GlobalFocusedMate._id], readBy: [] }).then((r) => {
+                            UpdateMessageToSent({ chat_id: message.chat_id, _id: message._id })
+                            setSending(false);
+                        })
+                    } else {
+
+                        UpdateMessageToSent({ chat_id: message.chat_id, _id: message._id })
+                        setSending(false);
+
+                    }
+
+                }
             }
 
         } else {
+            if (type == "image" && message.content.byteLength < 1048576) {
 
-            let EncodedMessa = EncodMessage(message);
-            console.log(EncodedMessa);
-            
-            let res = await api.post("/chat/addMessage", { ...EncodedMessa, isSent: true, recievedBy: [], readBy: [] })
-            console.log(res);;
-            setSending(false);
+                let EncodedMessa = EncodMessage(message);
+
+                if (EncodedMessa) {
+                    await api.post("/chat/addMessage", { ...EncodedMessa, isSent: true, recievedBy: [GlobalFocusedMate._id], readBy: [] }).then((r) => {
+                        OpenNote('done')
+                        UpdateMessageToSent({ chat_id: message.chat_id, _id: message._id })
+                        setSending(false);
+                    })
+                } else {
+                    OpenNote()
+                    setSending(false);
+                }
+
+            } else {
+                OpenNote()
+                setSending(false);
+            }
         }
     }
+
     useEffect(() => {
         if (message.isFromMe && !message.isSent) {
             handelSendFile();
@@ -176,20 +227,25 @@ const MessageTypeFile = ({ message }) => {
                                     {CorrectTime(message.sendAt)}
                                 </span>
 
-                                {
-                                    message.recievedBy?.length > 0 && message.readBy?.length == 0 &&
-                                    <p className='text-xs text-gray-700 font-normal opacity-70 ml-2'>received</p>
-                                }
 
-                                {message.recievedBy?.length == 0 && message.readBy?.length == 0 &&
+
+
+
+
+                                {message.readBy.includes(GlobalFocusedMate?._id) ?
+                                    <svg className='stroke-blue-500 w-5 h-5 ml-2' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path> <path d="M11.102 17.957c-3.204 -.307 -5.904 -2.294 -8.102 -5.957c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6a19.5 19.5 0 0 1 -.663 1.032"></path> <path d="M15 19l2 2l4 -4"></path> </svg>
+                                    :
                                     <>
-                                        <BtnSendFile onClick={handelSendFile} isSending={isSending} isSent={message.isSent} />
+                                        {message.recievedBy?.includes(GlobalFocusedMate?._id) ?
+                                            <svg className='w-5 h-5 ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z" /></svg>
+                                            :
+                                            <>
+                                                <BtnSendFile onClick={handelSendFile} isSending={isSending} isSent={message.isSent} />
 
+                                            </>
+
+                                        }
                                     </>
-                                }
-
-                                {message.readBy?.length > 0 &&
-                                    <p className='text-xs font-normal text-blue-500 opacity-80 ml-2'>Checked </p>
                                 }
                             </div>
                         </div>
