@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Spinner from './loaders/Spinner';
 import BtnRecordAudio from './BTNRecordAudio';
 
-const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => { }, isWaitinForRespose = false }) => {
-    const inpTextRef = useRef();
+const WriteMessage = React.forwardRef(({ className, value, onChange, placeholder, onSend = () => { }, isWaitinForRespose = false }, ref) => {
+    const inpTextRef = ref ? ref : useRef();
     const [message, setMessage] = useState('')
 
     useEffect(() => {
@@ -12,6 +12,9 @@ const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => 
         inpTextRef.current.style.height = `${inpTextRef.current.scrollHeight}px`;
     }, [message])
 
+    useEffect(()=>{
+        inpTextRef.current?.focus()
+    },[])
     const handelWriteMessage = e => {
         setMessage(e.target.value);
         onChange(e.target.value)
@@ -45,6 +48,6 @@ const WriteMessage = ({ className, value, onChange, placeholder, onSend = () => 
             </div>
         </label>
     )
-}
+})
 
 export default WriteMessage

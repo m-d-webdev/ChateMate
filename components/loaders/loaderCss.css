@@ -9,12 +9,13 @@
       transform: rotate(1turn);
    }
 }
+
 .dots {
    width: 20.3px;
    height: 5.0px;
-   background: radial-gradient(circle closest-side,rgb(14, 114, 255) 90%,#0000) 0%   50%,
-        radial-gradient(circle closest-side,rgb(14, 114, 255) 90%,#0000) 50%  50%,
-        radial-gradient(circle closest-side,rgb(14, 114, 255) 90%,#0000) 100% 50%;
+   background: radial-gradient(circle closest-side, rgb(14, 114, 255) 90%, #0000) 0% 50%,
+      radial-gradient(circle closest-side, rgb(14, 114, 255) 90%, #0000) 50% 50%,
+      radial-gradient(circle closest-side, rgb(14, 114, 255) 90%, #0000) 100% 50%;
    background-size: calc(100%/3) 100%;
    background-repeat: no-repeat;
    animation: dots-zcf63l 1s infinite linear;
@@ -22,14 +23,82 @@
 
 @keyframes dots-zcf63l {
    33% {
-      background-size: calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%;
+      background-size: calc(100%/3) 0%, calc(100%/3) 100%, calc(100%/3) 100%;
    }
 
    50% {
-      background-size: calc(100%/3) 100%,calc(100%/3) 0%  ,calc(100%/3) 100%;
+      background-size: calc(100%/3) 100%, calc(100%/3) 0%, calc(100%/3) 100%;
    }
 
    66% {
-      background-size: calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%;
+      background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%;
+   }
+}
+
+/* ------------ */
+.Serverloader {
+   width: 0;
+   height: 4.8px;
+   display: inline-block;
+   position: fixed;
+   background: #000000;
+   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+   box-sizing: border-box;
+   border-radius: 0 50% 50% 0;
+   animation: animFw 8s linear infinite;
+}
+   
+.Serverloader::after,
+.Serverloader::before {
+   content: '';
+   width: 10px;
+   height: 1px;
+   background: #000000;
+   position: absolute;
+   top: 9px;
+   right: -2px;
+   opacity: 0;
+   transform: rotate(-45deg) translateX(0px);
+   box-sizing: border-box;
+   animation: coli1 0.3s linear infinite;
+}
+
+.Serverloader::before {
+   top: -4px;
+   transform: rotate(45deg);
+   animation: coli2 0.3s linear infinite;
+}
+
+@keyframes animFw {
+   0% {
+      width: 0;
+   }
+
+   100% {
+      width: 100%;
+   }
+}
+
+@keyframes coli1 {
+   0% {
+      transform: rotate(-45deg) translateX(0px);
+      opacity: 0.7;
+   }
+
+   100% {
+      transform: rotate(-45deg) translateX(-45px);
+      opacity: 0;
+   }
+}
+
+@keyframes coli2 {
+   0% {
+      transform: rotate(45deg) translateX(0px);
+      opacity: 1;
+   }
+
+   100% {
+      transform: rotate(45deg) translateX(-45px);
+      opacity: 0.7;
    }
 }

@@ -31,7 +31,7 @@ const page = ({ params }) => {
             GetChatMessages()
         }
         SetMessagesSeen(id, GlobalFocusedMate?._id);
-    }, [])
+    }, []);
 
     const listMessagesRef = useRef();
     const GetChatMessages = async () => {
@@ -55,7 +55,8 @@ const page = ({ params }) => {
             top: listMessagesRef.current?.scrollHeight,
             behavior: "smooth"
         })
-    }, [allChats[id]])
+    }, [allChats[id]]);
+    
     return (
         <>
 

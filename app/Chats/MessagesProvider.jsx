@@ -16,6 +16,9 @@ const MessagesProvider = ({ children }) => {
     const [allChats, setChats] = useState({});
     const { thisUser } = useFriends();
 
+    // --------- Line soud be in the owlia section but ...
+    const [CurrentUrlToOwliaChats, setCurrentUrlToOwliaChats] = useState("/Owlia")
+    // -----------
 
     NoticeFriendOnLine = data => {
         console.log('noticed ');
@@ -90,7 +93,7 @@ const MessagesProvider = ({ children }) => {
 
 
     return (
-        <messagesContext.Provider value={{ allChats, setChats, UpdateMessageToSent, mates, ActiveMates }}>
+        <messagesContext.Provider value={{ allChats, setChats, UpdateMessageToSent, mates, ActiveMates, CurrentUrlToOwliaChats, setCurrentUrlToOwliaChats }}>
             {
                 thisUser != null && !isGettingmates &&
                 <SocketSetup clientId={thisUser._id} friendsIds={mates.map(m => m.mate._id)} />

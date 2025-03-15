@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import FriendProvider from "./user/profile/FriendProvider";
 import MessagesProvider from "./Chats/MessagesProvider";
 import Note from "@/components/Note";
+import StoreProider from "./StoreProider";
 const poppins = Poppins({ subsets: ['latin'], weight: ['500'] })
 
 export default async function RootLayout({ children, modal }) {
@@ -19,13 +20,15 @@ export default async function RootLayout({ children, modal }) {
     user = res.data
   }
 
+  console.log('this page re-render');
+  
 
   return (
     <html lang="en">
       <body
         className={`${poppins.className}  r-s-s`}
       >
-
+        <StoreProider />
         <FriendProvider>
           <MessagesProvider>
             <SiadeBare user={user} />

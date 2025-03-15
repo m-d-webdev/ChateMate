@@ -8,37 +8,50 @@ import Loader from '@/components/loaders/Loader';
 import { useFriends } from '@/app/user/profile/FriendProvider';
 import owlWelcoming from '@/public/lotties/owlWelcoming.json'
 import Lottie from 'react-lottie';
-import { useRouter } from 'next/navigation';
+import { UseAllChats } from '@/app/Chats/MessagesProvider';
+import { useOwliaContext } from '@/app/Owlia/Provider';
 
 const page = ({ params }) => {
-    const { id, messages } = React.use(params);
-    const { thisUser } = useFriends()
-    const Router = useRouter()
 
-    // -------
+    const { id, messages, isNew } = React.use(params);
+    
+    const { thisUser } = useFriends();
+
+    const { OwliaChats, AddAnewMessage } = useOwliaContext()
+    // -------      
     const [FaileToResponse, setFaileToResponse] = useState(false);
-    const [ChatMessages, setMessages] = useState([]);
     const [NewMessage, setNewMessage] = useState("")
     const [isWaitingForResponse, setWaitingForResponse] = useState(false)
     const messageContainerRef = useRef();
+    const { setCurrentUrlToOwliaChats } = UseAllChats();
+    const inppRef = useRef();
 
     useEffect(() => {
-        let MessgeFromUrl = Array.isArray(messages) ? messages[0] : messages;
-        if (MessgeFromUrl) {
-            MessgeFromUrl = decodeURIComponent(MessgeFromUrl);
-            GetFirstResponse(MessgeFromUrl);
-            Router.replace(`/Owlia/chats/${id}`)
+
+        if (isNew == "1") {
+            let MessgeFromUrl = Array.isArray(messages) ? messages[0] : messages;
+            if (MessgeFromUrl) {
+                MessgeFromUrl = decodeURIComponent(MessgeFromUrl);
+                GetFirstResponse(MessgeFromUrl);
+            };
         }
+
+        inppRef.current?.focus();
+        setCurrentUrlToOwliaChats(`/Owlia/chats/${id}/0`);
+
     }, []);
 
     const GetFirstResponse = async (MessgeFromUrl) => {
         setWaitingForResponse(true);
-        setMessages(pv => ([
+        AddAnewMessage(
             {
-                content: MessgeFromUrl,
-                isFromMe: true,
+                chatId: id,
+                message: {
+                    content: MessgeFromUrl,
+                    isFromMe: true,
+                }
             }
-        ]));
+        );
 
         setNewMessage("");
         let res = await api.post("/owlia/ask", {
@@ -51,15 +64,17 @@ const page = ({ params }) => {
         })
 
         if (res.status == 200) {
-            setMessages(pv => ([
-                ...pv,
+            AddAnewMessage(
                 {
-                    content: res.data.answer.reply,
-                    isFromMe: false,
+                    chatId: id,
+                    message: {
+                        content: res.data.answer.reply,
+                        isFromMe: false,
+                    }
                 }
-            ]))
-        } else {
+            );
 
+        } else {
             setFaileToResponse(true)
         }
         setWaitingForResponse(false);
@@ -70,7 +85,7 @@ const page = ({ params }) => {
 
         setWaitingForResponse(true);
 
-        let chatHistroy = ChatMessages.map(m => ({ role: m.isFromMe ? "user" : "assistant", content: m.content })).slice(-3);
+        let chatHistroy = OwliaChats[id]?.map(m => ({ role: m.isFromMe ? "user" : "assistant", content: m.content })).slice(-3) || [];
 
         chatHistroy.push(
             {
@@ -80,13 +95,15 @@ const page = ({ params }) => {
         )
 
 
-        setMessages(pv => ([
-            ...pv,
+        AddAnewMessage(
             {
-                content: NewMessage,
-                isFromMe: true,
+                chatId: id,
+                message: {
+                    content: NewMessage,
+                    isFromMe: true,
+                }
             }
-        ]));
+        );
 
 
         setNewMessage("");
@@ -95,13 +112,15 @@ const page = ({ params }) => {
 
 
         if (res.status == 200) {
-            setMessages(pv => ([
-                ...pv,
+            AddAnewMessage(
                 {
-                    content: res.data.answer.reply,
-                    isFromMe: false,
+                    chatId: id,
+                    message: {
+                        content: res.data.answer.reply,
+                        isFromMe: false,
+                    }
                 }
-            ]))
+            );
 
             messageContainerRef.current.scrollTo({
                 top: messageContainerRef.current?.scrollHeight - 300,
@@ -121,7 +140,7 @@ const page = ({ params }) => {
 
             <div style={{ paddingBottom: `${messageContainerRef.current?.offsetHeight - 500}px` }} ref={messageContainerRef} className='h-full scrl_none pt-10 mb-2 w-full max-h-full overflow-auto ' >
                 {
-                    ChatMessages.length == 0 &&
+                    !OwliaChats[id] &&
                     <div className='w-full h-full c-c-c'>
                         <Lottie options={{
                             animationData: owlWelcoming,
@@ -133,10 +152,12 @@ const page = ({ params }) => {
                 }
 
                 {
-                    ChatMessages.map((m, i) => {
+
+                    OwliaChats[id]?.map((m, i) => {
                         m.img = m.isFromMe ? (thisUser?.pic || "https://i.pinimg.com/236x/56/2e/be/562ebed9cd49b9a09baa35eddfe86b00.jpg") : "/icones/owliaLogo.svg";
                         return <Message m={m} key={i} />
                     })
+
                 }
 
                 {
@@ -152,14 +173,17 @@ const page = ({ params }) => {
                     </p>
                 }
             </div>
+
             <WriteMessage
                 onChange={e => setNewMessage(e)}
                 className={''}
                 onSend={SendMessage}
                 value={NewMessage}
+                ref={inppRef}
                 isWaitinForRespose={isWaitingForResponse}
                 placeholder={"Ask Owlia anything .. "}
             />
+
         </div>
     )
 }

@@ -17,11 +17,14 @@ const ListChatsCLient = () => {
 
     UnsetFriendTyping = friendId => {
         setFriendsTyping(friendsTyping.filter(e => e != friendId))
-    }
+    };
+
     const { mates } = UseAllChats();
+    
     const [RealListFriends, setRealListFriends] = useState(mates)
     const [GlobalFocusedMate, setGlobalFocusedMate] = useState(mates)
-    const [CurrentIndex, setCurrentIndex] = useState(mates)
+    const [CurrentIndex, setCurrentIndex] = useState(mates);
+
     useEffect(() => {
         setRealListFriends(mates.sort((a, b) => new Date(b.LastMessage?.sendAt) - new Date(a.LastMessage?.sendAt)))
     }, [mates]);
