@@ -18,8 +18,12 @@ const page = () => {
         setLoading(true)
 
         await api.post('/login', { emailOrName, password }).then((res) => {
-            Cookies.set('token', res.data.token)
-            window.location.href = "/"
+            if (res.data.token) {
+                console.log(res.data.token);
+                
+                Cookies.set('token', res.data.token)
+                window.location.href = "/"
+            }
         })
             .catch(err => {
                 setLoading(false)
