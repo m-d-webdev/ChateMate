@@ -7,7 +7,7 @@ let socket;
 export const StartSocket = (clientId, friendsIds) => {
     console.log('  ---------------- WEBSOCKET CONNECTION STARED (SOCKET.IO ⚡) ----------------');
 
-    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000", {
+    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
         query: {
             clientId: clientId,
             friendsIds: JSON.stringify(friendsIds)
@@ -35,6 +35,8 @@ export const StartSocket = (clientId, friendsIds) => {
             AddFriendsTyping(friendId)
         }
     })
+
+
     socket.on("friendAcceptReq", data => {
         if (AddNewMateFromSocket) {
             AddNewMateFromSocket(data.data)

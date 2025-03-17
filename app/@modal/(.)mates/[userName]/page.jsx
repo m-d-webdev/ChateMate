@@ -28,7 +28,8 @@ export default async function UserPage({ params }) {
             </CustomDialog>
         );
     } catch (error) {
-        log
+        console.log(error);
+
         return (
             <CustomDialog className={'w-full c-c-c max-w-xl'}>
                 <h1 className="text-2xl  opacity-70 font-medium">                    User not found</h1>

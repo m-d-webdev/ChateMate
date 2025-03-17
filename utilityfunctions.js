@@ -3,12 +3,15 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { GetSocket } from './config/socket';
 
+const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export const api = axios.create(
     {
-        baseURL: "https://chatmate-backend-production.up.railway.app",
+        baseURL: url,
         headers: {
             Authorization: `Bearer ${Cookies.get('token') ? Cookies.get('token') : null}`
         },
+
         withCredentials: true
     }
 )
