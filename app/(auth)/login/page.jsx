@@ -19,17 +19,15 @@ const page = () => {
 
         await api.post('/login', { emailOrName, password }).then((res) => {
             if (res.data.token != undefined) {
-                
-                Cookies.set('token', res.data.token)
+                Cookies.set('token', res.data.token);
                 window.location.href = "/"
             }
+            setLoading(false)
         })
             .catch(err => {
                 setLoading(false)
                 setError(true)
             })
-
-
     }
 
     return (
