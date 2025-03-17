@@ -22,7 +22,7 @@ const page = () => {
                 console.log(res.data.token);
                 
                 Cookies.set('token', res.data.token)
-                window.location.href = "/"
+                // window.location.href = "/"
             }
         })
             .catch(err => {
