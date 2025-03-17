@@ -7,7 +7,7 @@ let socket;
 export const StartSocket = (clientId, friendsIds) => {
     console.log('  ---------------- WEBSOCKET CONNECTION STARED (SOCKET.IO ⚡) ----------------');
 
-    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
+    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000", {
         query: {
             clientId: clientId,
             friendsIds: JSON.stringify(friendsIds)
