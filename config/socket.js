@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import { AddMessgeFromSocket, UpdateMessToSeen } from '@/app/Chats/MessagesProvider'
+import { AddMessgeFromSocket, UpdateMessToSeen, AddNewMateFromSocket } from '@/app/Chats/MessagesProvider'
 import { AddFriendsTyping, UnsetFriendTyping } from '@/components/ListChatsCLient';
 import { AddFocusedFriendTyping, UnsetFocusedFriendTyping } from '@/app/Chats/[id]/layout';
 import { NoticeFriendOnLine } from '@/app/Chats/MessagesProvider';
@@ -34,6 +34,12 @@ export const StartSocket = (clientId, friendsIds) => {
         if (AddFriendsTyping) {
             AddFriendsTyping(friendId)
         }
+    })
+    socket.on("friendAcceptReq", data => {
+        if (AddNewMateFromSocket) {
+            AddNewMateFromSocket(data.data)
+        }
+
     })
 
     socket.on("friendsStopedTyping", friendId => {

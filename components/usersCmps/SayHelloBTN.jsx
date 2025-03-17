@@ -1,7 +1,7 @@
 "use client";
 import { api } from '@/utilityfunctions';
 import React, { useState } from 'react'
-import Spinner from './loaders/Spinner';
+import Spinner from '../loaders/Spinner';
 import { useFriends } from '@/app/user/profile/FriendProvider';
 import BtnOpenChat from './BtnOpenChat';
 import BtnAcceptMate from './BtnAcceptMate';
@@ -10,15 +10,14 @@ import { UseAllChats } from '@/app/Chats/MessagesProvider';
 const SayHiBTN = ({ mate }) => {
 
   const [isLoading, setLoading] = useState(false);
-  const {  matesReqs, setMatesReqs, thisUser } = useFriends()
-  const {mates} = UseAllChats()
- 
+  const { matesReqs, setMatesReqs, thisUser } = useFriends()
+  const { mates } = UseAllChats()
+
 
   const sendSayHeight = async () => {
     setLoading(true);
     let res = await api.post('/meetMates/new', { mateId: mate._id })
-    console.log(res);
-    setMatesReqs(pv => [...pv, res.data]);
+    setMatesReqs(pv => [...pv, { ...res.data, mate }]);
     setLoading(false);
   };
 
@@ -32,7 +31,7 @@ const SayHiBTN = ({ mate }) => {
         mates.some(m => m.mate?._id == mate._id) &&
         <span className='opacity-80 r-c-c'>
           In your contact
-          <svg className='ml-2' xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24" fill="none" stroke="currentColor"  strokeLinecap="round" strokeLinejoin="round" width={32} height={32}  strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path> <path d="M15 19l2 2l4 -4"></path> </svg> 
+          <svg className='ml-2' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path> <path d="M15 19l2 2l4 -4"></path> </svg>
         </span>
       }
       {

@@ -5,7 +5,7 @@ import { GetSocket } from './config/socket';
 
 export const api = axios.create(
     {
-        baseURL: "http://localhost:5000",
+        baseURL: "https://chatmate-backend-production.up.railway.app",
         headers: {
             Authorization: `Bearer ${Cookies.get('token') ? Cookies.get('token') : null}`
         },

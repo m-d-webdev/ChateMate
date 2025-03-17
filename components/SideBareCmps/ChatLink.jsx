@@ -16,7 +16,7 @@ const ChatLink = () => {
 
     }, [mates]);
     return (
-        <Link className='c-c-c opacity-80 hover:opacity-100  mb-7 relative' href={'/Chats'}>
+        <Link className='c-c-c opacity-80 hover:opacity-100   relative' href={'/Chats'}>
             {
                 countMsgsUnread > 0 &&
                 <p className='absolute -top-3 -left-2 w-5 h-5 text-sm c-c-c rounded-full text-white bg-green-500'>

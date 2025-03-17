@@ -5,9 +5,9 @@ const ResultMate = ({ mate }) => {
     return (
         <div className='w-full mb-12  border-b p-21 px-2 rounded-xl  r-b-s '>
             <div className="r-s-s">
-                <img src={mate.pic} alt="" className='w-16 h-16 img ' />
+                <img src={mate.pic} alt="" className='w-12 h-12 img ' />
                 <div className="c-s-s ml-2">
-                    <h1 className='text-xl '>{mate.fullName}</h1>
+                    <h1 className=''>{mate.fullName}</h1>
                     <h2 className='opacity-70 font-medium'>{mate.userName}</h2>
                 </div>
             </div>

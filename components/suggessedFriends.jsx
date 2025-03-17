@@ -31,7 +31,7 @@ const SuggessedFriends = () => {
 
     }, [isMenuOpened])
     return (
-        <div className="c-s-s relative  h-3/4 ">
+        <div className="c-s-s relative  w-2/12 h-3/4 ">
             <AnimatePresence>
                 {
                     isMenuOpened &&

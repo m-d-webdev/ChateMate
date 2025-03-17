@@ -4,8 +4,9 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { useFriends } from '../user/profile/FriendProvider';
 import SocketSetup from '@/components/SocketSetup';
 import { api } from '@/utilityfunctions';
+import Cookies from 'js-cookie';
 const messagesContext = createContext();
-export let AddMessgeFromSocket, UpdateMessToSeen;
+export let AddMessgeFromSocket, UpdateMessToSeen, AddNewMateFromSocket;
 export let NoticeFriendOnLine;
 
 const MessagesProvider = ({ children }) => {
@@ -21,8 +22,6 @@ const MessagesProvider = ({ children }) => {
     // -----------
 
     NoticeFriendOnLine = data => {
-        console.log('noticed ');
-
         if (data.isConnected == true) {
             setActiveMates(pv => [...pv, data.friendId])
         }
@@ -31,12 +30,14 @@ const MessagesProvider = ({ children }) => {
         }
     }
 
+    const { setMatesReqs } = useFriends()
     const getChatList = async () => {
         try {
-            await api.get("/user/getChatList").then(res => {
-                setMates(res.data.chats);
-                setGettingMates(false)
-            })
+            if (Cookies.get("token"))
+                await api.get("/user/getChatList").then(res => {
+                    setMates(res.data.chats);
+                    setGettingMates(false)
+                })
 
         } catch (error) { }
 
@@ -90,10 +91,14 @@ const MessagesProvider = ({ children }) => {
         }
     }
 
+    AddNewMateFromSocket = d => {
+        setMates(pv => [...pv, d]);
+        setMatesReqs(pv => pv.filter(e => e.to != d.mate?._id))
 
+    }
 
     return (
-        <messagesContext.Provider value={{ allChats, setChats, UpdateMessageToSent, mates, ActiveMates, CurrentUrlToOwliaChats, setCurrentUrlToOwliaChats }}>
+        <messagesContext.Provider value={{ setMates, allChats, setChats, UpdateMessageToSent, mates, ActiveMates, CurrentUrlToOwliaChats, setCurrentUrlToOwliaChats }}>
             {
                 thisUser != null && !isGettingmates &&
                 <SocketSetup clientId={thisUser._id} friendsIds={mates.map(m => m.mate._id)} />

@@ -14,9 +14,8 @@ const FriendsContext = createContext();
 const FriendProvider = ({ children }) => {
     const [matesReqs, setMatesReqs] = useState([]);
     const [thisUser, setThisUser] = useState(null);
-    const [isReady, setReady] = useState(false);
 
- 
+    
 
     const getMateReq = async () => {
         return new Promise(
@@ -52,7 +51,6 @@ const FriendProvider = ({ children }) => {
     const GetDependencies = async (params) => {
         await getThisUser();
         await getMateReq();
-        setReady(true)
     }
 
     useEffect(() => {

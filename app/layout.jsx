@@ -2,7 +2,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "./Sub.css";
-import SiadeBare from "@/components/SiadeBare";
+import SiadeBare from "@/components/SideBareCmps/SiadeBare";
 import { api } from "@/utilityfunctions";
 import { cookies } from "next/headers";
 import FriendProvider from "./user/profile/FriendProvider";
@@ -16,12 +16,14 @@ export default async function RootLayout({ children, modal }) {
   const token = co.get("token") || null;
   let user = null;
   if (token) {
-    let res = await api.post("/authenticateUser", { token: token.value });
-    user = res.data
-  }
+    try {
+      let res = await api.post("/authenticateUser", { token: token.value });
+      if (res.data) {
+        user = res.data
+      }
+    } catch (error) { }
 
-  console.log('this page re-render');
-  
+  }
 
   return (
     <html lang="en">
