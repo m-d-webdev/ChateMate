@@ -1,8 +1,6 @@
 "use server";
 import CustomDialog from "@/components/CustomDialog";
 import { api } from "@/utilityfunctions";
-import { Aoboshi_One } from 'next/font/google'
-import Link from "next/link";
 import ThisUser from "./cmps/ThisUser";
 import OtherUser from "./cmps/OtherUser";
 import GetUser from "@/app/user/profile/GetUser";

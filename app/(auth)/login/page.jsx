@@ -6,6 +6,7 @@ import CustomInput from '@/components/CustomInput'
 import { api } from '@/utilityfunctions';
 import Spinner from '@/components/loaders/Spinner';
 import Cookies from 'js-cookie';
+import FRB_BtnLogin from '@/components/firebase/FRB_BtnLogin';
 const page = () => {
 
     const [isLoading, setLoading] = useState(false)
@@ -18,6 +19,24 @@ const page = () => {
         setLoading(true)
 
         await api.post('/login', { emailOrName, password }).then((res) => {
+            if (res.data.token != undefined) {
+                Cookies.set('token', res.data.token);
+                window.location.href = "/"
+            }
+            setLoading(false)
+        })
+            .catch(err => {
+                setLoading(false)
+                setError(true)
+            })
+    }
+    const handelLoginFromPopup = async (e) => {
+        if (!e.email) {
+            setError(true)
+            return;
+        }
+        setLoading(true);
+        await api.post('/loginFromPopup', { email: e.email }).then((res) => {
             if (res.data.token != undefined) {
                 Cookies.set('token', res.data.token);
                 window.location.href = "/"
@@ -99,12 +118,7 @@ const page = () => {
 
                     <div className="c-s-s w-full">
                         <div className="w-full  max-w-md mt-20 r-p-c">
-                            <button className='py-3 mr-1 border group rounded-md  w-2/4 r-c-c'>
-                                <svg className=' group-hover:stroke-none group-hover:fill-red-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"></path> </svg>
-                                <p className="font-bold group-hover:text-red-500 ml-2 opacity-70">
-                                    Google
-                                </p>
-                            </button>
+                            <FRB_BtnLogin onEmailReady={(email) => { handelLoginFromPopup({ email }) }} />
                             <button className='py-3 border group rounded-md  w-2/4 r-c-c'>
                                 <svg className=' group-hover:stroke-none group-hover:fill-blue-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path> </svg>
                                 <p className="font-bold ml-2  group-hover:text-blue-500 opacity-70">
@@ -154,10 +168,10 @@ const page = () => {
                     </a>
 
                 </div>
-                <Link href={"/l"} className="opacity-70  r-s-c mr-10">
+                <a href={"https://iderkaoui1.netlify.app"} className="opacity-70  r-s-c mr-10" target="_blank">
                     Mind Behind ChatMate
                     <svg className="w-6 h-6 ml-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path> </svg>
-                </Link>
+                </a>
             </div>
         </div>
     )

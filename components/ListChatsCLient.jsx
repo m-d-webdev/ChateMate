@@ -5,6 +5,7 @@ import { UseAllChats } from '@/app/Chats/MessagesProvider';
 import { getGlobalForcuedMate } from '@/app/Chats/[id]/layout';
 import SliderListFriend from './SliderListFriend';
 import Cookies from 'js-cookie';
+import EmptyLottie from './lotties/empty';
 
 export let AddFriendsTyping, UnsetFriendTyping;
 
@@ -34,24 +35,25 @@ const ListChatsCLient = () => {
         }
 
     }, [window.location.pathname]);
+
     useEffect(() => {
         if (GlobalFocusedMate) {
             let Preindex = mates.findIndex(e => e.mate._id === GlobalFocusedMate?._id);
             setCurrentIndex(Preindex)
         }
-    }, [GlobalFocusedMate])
+    }, [GlobalFocusedMate]);
 
 
     const handelCloseSideBare = () => {
         if (Cookies.get('s-op') == "open") {
-            Cookies.set("s-op", "closed")
-            setOpenAll(false)
+            Cookies.set("s-op", "closed");
+            setOpenAll(false);
         } else {
-            Cookies.set("s-op", "open")
-            setOpenAll(true)
+            Cookies.set("s-op", "open");
+            setOpenAll(true);
+        };
 
-        }
-    }
+    };
     return (
         <>
             {
@@ -76,10 +78,14 @@ const ListChatsCLient = () => {
 
                             <div className="h-full w-full c-s-c mt-2 pl-2 overflow-auto scrl_none relative">
                                 <SliderListFriend OpenAll={OpenAll} CurrentIndex={CurrentIndex} />
-                                {
+                                {RealListFriends.length >0?
                                     RealListFriends.map((u, i) => {
                                         return <FriendComp OpenAll={OpenAll} data={u} key={i} friendsTyping={friendsTyping} />
                                     })
+                                    :
+                                    <>
+                                        <EmptyLottie  text='no friends yet ' />
+                                    </>
                                 }
                             </div>
 
@@ -95,10 +101,15 @@ const ListChatsCLient = () => {
 
                             <div className="h-full w-full c-s-c mt-2 pl-2 overflow-auto scrl_none relative">
                                 <SliderListFriend OpenAll={OpenAll} CurrentIndex={CurrentIndex} />
-                                {
+                                
+                                {RealListFriends.length >0?
                                     RealListFriends.map((u, i) => {
                                         return <FriendComp OpenAll={OpenAll} data={u} key={i} friendsTyping={friendsTyping} />
                                     })
+                                    :
+                                    <>
+                                        <EmptyLottie  text='no friends yet ' />
+                                    </>
                                 }
                             </div>
 

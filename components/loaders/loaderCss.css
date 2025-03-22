@@ -1,15 +1,70 @@
 .spinner {
-
+   width: 24px;
+   height: 24px;
+   display: grid;
    border-radius: 50%;
-   animation: spinner-zp9dbg 1s infinite linear;
+   -webkit-mask: radial-gradient(farthest-side, #0000 40%, #000000 41%);
+   background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 1) 0) center/1.9px 100%,
+      linear-gradient(90deg, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.75) 0) center/100% 1.9px;
+   background-repeat: no-repeat;
+   animation: spinner-d3o0rx 1s infinite steps(12);
 }
 
-@keyframes spinner-zp9dbg {
-   to {
+.spinner::before,
+.spinner::after {
+   content: "";
+   grid-area: 1/1;
+   border-radius: 50%;
+   background: inherit;
+   opacity: 0.915;
+   transform: rotate(30deg);
+}
+
+.spinner::after {
+   opacity: 0.83;
+   transform: rotate(60deg);
+}
+
+@keyframes spinner-d3o0rx {
+   100% {
       transform: rotate(1turn);
    }
 }
 
+
+.spinnerWhite {
+   width: 24px;
+   height: 24px;
+   display: grid;
+   border-radius: 50%;
+   -webkit-mask: radial-gradient(farthest-side,#0000 40%,#ffffff 41%);
+   background: linear-gradient(0deg ,rgba(255,255,255,0.5) 50%,rgba(255,255,255,1) 0) center/1.9px 100%,
+        linear-gradient(90deg,rgba(255,255,255,0.25) 50%,rgba(255,255,255,0.75) 0) center/100% 1.9px;
+   background-repeat: no-repeat;
+   animation: spinner-d3o0rx 1s infinite steps(12);
+}
+
+.spinnerWhite::before,
+.spinnWhiteer::after {
+   content: "";
+   grid-area: 1/1;
+   border-radius: 50%;
+   background: inherit;
+   opacity: 0.915;
+   transform: rotate(30deg);
+}
+
+.spinnerWhite::after {
+   opacity: 0.83;
+   transform: rotate(60deg);
+}
+
+@keyframes spinner-d3o0rx {
+   100% {
+      transform: rotate(1turn);
+   }
+}
+/* ---------------- */
 .dots {
    width: 20.3px;
    height: 5.0px;
@@ -38,16 +93,16 @@
 /* ------------ */
 .Serverloader {
    width: 0;
-   height: 4.8px;
+   height: 3.8px;
    display: inline-block;
    position: fixed;
    background: #000000;
    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
    box-sizing: border-box;
-   border-radius: 0 50% 50% 0;
+   border-radius: 5pc;
    animation: animFw 8s linear infinite;
 }
-   
+
 .Serverloader::after,
 .Serverloader::before {
    content: '';

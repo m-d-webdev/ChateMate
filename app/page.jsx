@@ -57,7 +57,7 @@ export default  function Home() {
             </p>
           </a>
 
-          <a className="r-s-c ml-5 opacity-60 hover:opacity-100  " href="https://instagramm.com" target="_blank">
+          <a className="r-s-c ml-5 opacity-60 hover:opacity-100  " href="https://instagram.com" target="_blank">
             <svg className="w-6 stroke-2 stroke-blue-500  h-6 ml-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path> <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path> <path d="M16.5 7.5l0 .01"></path> </svg>
             <p className="ml-2  text-blue-500">
               ChateMate.insta
@@ -72,10 +72,10 @@ export default  function Home() {
           </a>
 
         </div>
-        <Link href={"/l"} className="opacity-70  r-s-c mr-10">
+        <a href={"https://iderkaoui1.netlify.app"} className="opacity-70  r-s-c mr-10" target="_blank">
           Mind Behind ChatMate
           <svg className="w-6 h-6 ml-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path> </svg>
-        </Link>
+        </a>
       </div>
     </div>
   );

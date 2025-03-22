@@ -1,3 +1,4 @@
+"use client"
 import { ChatContext } from '@/app/Chats/[id]/layout';
 import { UseAllChats } from '@/app/Chats/MessagesProvider';
 import { useFriends } from '@/app/user/profile/FriendProvider';
@@ -94,6 +95,7 @@ const UploaderElem = ({ height, isSending, isSent }) => {
         </>
     )
 }
+
 const MessageTypeFile = ({ message }) => {
 
     if (typeof (message.content) == "string") {
@@ -187,7 +189,7 @@ const MessageTypeFile = ({ message }) => {
     }, [])
 
 
-    return (
+    return useMemo(() => (
         <div className={`f-full  mb-8 ${message.isFromMe ? "r-e-c" : "r-s-c"}`}>
             {message.isFromMe ?
                 <div className='r-e-s h-fit'>
@@ -290,7 +292,7 @@ const MessageTypeFile = ({ message }) => {
             }
 
         </div >
-    )
+    ), [message])
 }
 
 export default MessageTypeFile

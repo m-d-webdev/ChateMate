@@ -9,6 +9,7 @@ import { useRouter } from 'next/compat/router'
 import Cookies from 'js-cookie';
 import Chance from 'chance';
 import Spinner from '@/components/loaders/Spinner';
+import FRB_BtnLogin from '@/components/firebase/FRB_BtnLogin';
 
 const page = () => {
     const [isLoading, setLoading] = useState(false);
@@ -104,7 +105,6 @@ const page = () => {
     const GenUserName = async () => {
 
         let randomChar = "";
-
         "ABCDEFG-HIJKLMNOP-QRST45nop627UVWXY1UVWX232kl38-Zabcd-efghij-klTUVWXY38-456mnopq2klTU78Zabcd-efghijklmnopqrstuvwxyz7012338-45627819"
             .split("")
             .map((c, i) => {
@@ -133,8 +133,10 @@ const page = () => {
             setUserNameIsAlreadyEx(true)
         } else {
             setNewUser(c => ({ ...c, userName: suggesedUserName }))
+
             setCheckinguserName(false)
-            setUserNameIsAlreadyEx(false)
+            setUserNameIsAlreadyEx(false);
+            return suggesedUserName
         }
     }
 
@@ -148,6 +150,53 @@ const page = () => {
     }, [passToConfirme, newUser.password])
 
 
+
+    const HandelSubmitDataFromPopup = async (data) => {
+        if (!data.email || !data.displayName || !data.photoURL) {
+            setError(true);
+            return;
+        };
+
+        setLoading(true);
+        if (newUser.userName != "" && !InvalideUserName && !isCheckinguserName) {
+            await api.post('/registerFromPopup', { fullName: data.displayName, email: data.email, pic: data.photoURL, userName: newUser.userName }).then(res => {
+                Cookies.set("token", res.data.token);
+                window.location.href = "/";
+                setLoading(false)
+            }).catch(error => {
+                if (error.response.data.error_code == "email_already_exists") {
+                    setNewUser(pv => ({ ...pv, email: data.email }))
+                    setEmailIsAlreadyEx(true);
+                }
+                setError(true);
+
+                setLoading(false)
+            })
+        } else {
+
+            const GenUserName2 = async () => {
+                let userName = await GenUserName();
+                await api.post('/registerFromPopup', { fullName: data.displayName, email: data.email, pic: data.photoURL, userName }).then(res => {
+                    Cookies.set("token", res.data.token);
+                    window.location.href = "/";
+                    setLoading(false);
+                }).catch(error => {
+                    if (error.response.data.error_code == "email_already_exists") {
+                        setNewUser(pv => ({ ...pv, email: data.email }))
+                        setEmailIsAlreadyEx(true);
+                    }
+
+                    setError(true);
+                    setLoading(false)
+                });
+
+            }
+            GenUserName2()
+
+        }
+
+
+    }
     return (
         <div className="w-full    h-screen c-b-c">
             <div className=""></div>
@@ -277,12 +326,7 @@ const page = () => {
 
                     <div className="c-s-c max-w-md w-full">
                         <div className="w-full  max-w-md  r-p-c">
-                            <button className='py-3 mr-1 border group rounded-md  w-2/4 r-c-c'>
-                                <svg className=' group-hover:stroke-none group-hover:fill-red-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z"></path> </svg>
-                                <p className="font-bold group-hover:text-red-500 ml-2 opacity-70">
-                                    Google
-                                </p>
-                            </button>
+                            <FRB_BtnLogin onAllDataReady={HandelSubmitDataFromPopup} />
                             <button className='py-3 border group rounded-md  w-2/4 r-c-c'>
                                 <svg className=' group-hover:stroke-none group-hover:fill-blue-500' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path> </svg>
                                 <p className="font-bold ml-2  group-hover:text-blue-500 opacity-70">
@@ -332,10 +376,10 @@ const page = () => {
                     </a>
 
                 </div>
-                <Link href={"/l"} className="opacity-70  r-s-c mr-10">
+                <a href={"https://iderkaoui1.netlify.app"} className="opacity-70  r-s-c mr-10" target="_blank">
                     Mind Behind ChatMate
                     <svg className="w-6 h-6 ml-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" width={32} height={32} strokeWidth={1}> <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path> <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path> </svg>
-                </Link>
+                </a>
             </div>
         </div>
     )

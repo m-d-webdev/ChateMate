@@ -37,8 +37,7 @@ const SayHiBTN = ({ mate }) => {
       {
         matesReqs.some(m => m.to == mate._id && m.type == "direct") &&
         <div className='w-full r-e-c'>
-          <p className='mr-2 opacity-80'>Request sent </p>
-          <BtnOpenChat userName={mate.userName} />
+          <p className='mr-2 r-s-c  opacity-80'>Your chat request has been sent successfully to {mate.fullName} <svg className='ml-2' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg> </p>
         </div>
       }
       {
@@ -53,7 +52,7 @@ const SayHiBTN = ({ mate }) => {
         !matesReqs.some(m => m.to == mate._id && m.type == "direct") &&
         !mates.some(m => m.mate._id == mate._id) &&
 
-        <button onClick={sendSayHeight} className=' border rounded-3xl border-gray-600 opacity-80 hover:opacity-100  p-1 px-4 font-bold r-c-c'>
+        <button onClick={sendSayHeight} className=' border rounded-md border-gray-600 opacity-80 hover:opacity-100  p-1 px-4 w-[250px] font-bold r-c-c'>
           {
             isLoading ?
               <Spinner />

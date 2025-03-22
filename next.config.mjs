@@ -10,7 +10,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["i.pinimg.com", "localhost"]
+    domains: ["i.pinimg.com", "localhost","chatmate-backend-production.up.railway.app"]
   },
   reactStrictMode: false
 };
